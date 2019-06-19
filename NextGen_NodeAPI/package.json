@@ -1,0 +1,14 @@
+{
+  "name": "next-gen_node-api",
+  "version": "0.0.0",
+  "description": "NextGen_NodeAPI",
+  "main": "server.js",
+  "author": {
+    "name": ""
+  },
+  "dependencies": {
+    "async": "^3.0.1",
+    "aws-sdk": "^2.478.0",
+    "express": "^4.17.1"
+  }
+}
