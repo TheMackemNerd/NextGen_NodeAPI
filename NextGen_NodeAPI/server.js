@@ -2,6 +2,7 @@
 var http = require('http');
 var AWS = require("aws-sdk")
 const express = require('express')
+const cors = require('cors')
 const app = express()
 
 var sub = "";
@@ -17,7 +18,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.get('/api/v1/users', function(req, res, next) {
+app.get('/api/v1/users', cors(), function(req, res, next) {
 
     sub = req.query.sub;
 
@@ -92,7 +93,7 @@ function getIdFromSub(callback) {
     docClient.query(params, function (err, data) {        
         if (err) {
             console.log("Query in in error");
-            callback(error)
+            callback(err)
 
         } else {
             console.log("Query succeeded.");
@@ -125,7 +126,7 @@ function getUser(callback) {
     docClient.query(params, function (err, data) {
         if (err) {
             console.log("Query in in error");
-            callback(error)
+            callback(err)
         } else {
             console.log("Query succeeded.");
             var item = data.Items[0];
