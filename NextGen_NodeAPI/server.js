@@ -98,7 +98,7 @@ app.post('/api/v1/users', cors(), function (req, res, next) {
         }
         else {
             console.log("User added successfully");
-            res.status(200).send("{ 'status' : '" + item.UserStatus + "'}");
+            res.status(200).send("{ 'status' : '" + item.User.Username + "'}");
         }
 
     });   
