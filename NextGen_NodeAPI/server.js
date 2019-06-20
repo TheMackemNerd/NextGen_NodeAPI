@@ -20,7 +20,7 @@ app.use(function (req, res, next) {
 });
 
 app.use(cors());
-app.use(bodyParser());
+app.use(bodyParser.json());
 
 
 app.options('*', cors());
