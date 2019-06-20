@@ -18,7 +18,8 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.options('/api/v1/users', cors());
+app.use(cors());
+app.options('*', cors());
 
 app.get('/api/v1/users', cors(), function(req, res, next) {
 
