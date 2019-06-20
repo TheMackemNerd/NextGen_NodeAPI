@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "amazon-cognito-identity-js": "^3.0.13",
+    "amazon-cognito-identity-js-with-node-fetch": "^3.0.14",
     "async": "^3.0.1",
     "aws-sdk": "^2.478.0",
     "body-parser": "^1.19.0",

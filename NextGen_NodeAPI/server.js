@@ -1,13 +1,13 @@
 'use strict';
 var http = require('http');
 var AWS = require("aws-sdk")
-const AmazonCognitoIdentity = require('amazon-cognito-identity-js')
-const fetch = require('node-fetch');
+const AmazonCognitoIdentity = require('amazon-cognito-identity-js-with-node-fetch')
 const CognitoUserPool = AmazonCognitoIdentity.CognitoUserPool
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const app = express()
+const fetch = require('node-fetch')
 
 var sub = "";
 var id = 0;
