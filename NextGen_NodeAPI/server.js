@@ -119,7 +119,7 @@ function addUserToCognito(callback) {
         UserPoolId: 'eu-west-1_2DtCcoypN',
         Username: email, 
         DesiredDeliveryMediums: [
-            EMAIL            
+            'EMAIL'            
         ],
         UserAttributes: [
             {
