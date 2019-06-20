@@ -240,6 +240,7 @@ function getUser(callback) {
     console.log("Entering getUser");
 
     AWS.config.update({ endpoint: "https://dynamodb.eu-west-1.amazonaws.com" });
+    var ddb = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
 
     var params = {
         TableName: "KFPNextGenUsers",
@@ -252,7 +253,7 @@ function getUser(callback) {
         }
     };
 
-    docClient.query(params, function (err, data) {
+    ddb.query(params, function (err, data) {
         if (err) {
             console.log("Query in in error");
             callback(err)
