@@ -19,6 +19,10 @@ app.use(function (req, res, next) {
 });
 
 app.use(cors());
+app.use(express.urlencoded());
+app.use(express.json());
+
+
 app.options('*', cors());
 
 app.get('/api/v1/users', cors(), function(req, res, next) {
@@ -70,6 +74,19 @@ app.get('/api/v1/users', cors(), function(req, res, next) {
 
 
 });
+
+app.post('/api/v1/users', cors(), function (req, res, next) {
+
+    var email = req.body.emailaddress;
+    var fullname = req.body.fullname;
+    var tenant = req.body.tenant;
+
+    console.log(email + " " + fullname + " " + tenant);
+
+    res.status(200).send();
+
+});
+
 
 function outputError(res, status, code, short, desc) {
 
