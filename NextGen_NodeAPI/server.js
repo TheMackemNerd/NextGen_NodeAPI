@@ -98,7 +98,7 @@ app.post('/api/v1/users', cors(), function (req, res, next) {
         }
         else {
             console.log("User added successfully");
-            res.status(200).send("{ 'sub' : '" + item + "'}");
+            res.status(200).send("{ 'status' : '" + item.UserStatus + "'}");
         }
 
     });   
@@ -113,12 +113,46 @@ function addUserToCognito(callback) {
     }; 
 
     const pool_region = 'eu-west-1';
-
     const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
+    var params = {
+        UserPoolId: 'eu-west-1_2DtCcoypN',
+        Username: email, 
+        DesiredDeliveryMediums: [
+            EMAIL            
+        ],
+        UserAttributes: [
+            {
+                Name: 'email', /* required */
+                Value: email
+            },
+            {
+                Name: 'custom.tenant',
+                value: tenant
+            }
+        ]
+    };
+
+    var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
+    cognitoidentityserviceprovider.adminCreateUser(params, function (err, data) {
+        if (err) {
+            console.log(err);
+            callback(err);
+        }
+
+        console.log('user name is ' + JSON.stringify(data));
+        callback(null, data);
+
+
+    });
+
+
+    /*
     var attributeList = [];
     attributeList.push(new AmazonCognitoIdentity.CognitoUserAttribute({ Name: "email", Value: email }));
     attributeList.push(new AmazonCognitoIdentity.CognitoUserAttribute({ Name: "custom:tenant", Value: tenant }));
+
+    cogSP.
 
     userPool.signUp(email, 'SamplePassword_123', attributeList, null, function (err, result) {
         if (err) {
@@ -130,7 +164,8 @@ function addUserToCognito(callback) {
         console.log('user name is ' + cognitoUser.getUsername());
         callback(null, cognitoUser.getUsername());
 
-    });    
+    });
+    */   
 
 }
 
