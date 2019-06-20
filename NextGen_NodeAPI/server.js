@@ -120,7 +120,7 @@ function addUserToCognito(callback) {
     attributeList.push(new AmazonCognitoIdentity.CognitoUserAttribute({ Name: "email", Value: email }));
     attributeList.push(new AmazonCognitoIdentity.CognitoUserAttribute({ Name: "custom:tenant", Value: tenant }));
 
-    userPool.signUp(email, 'SamplePassword123', attributeList, null, function (err, result) {
+    userPool.signUp(email, 'SamplePassword_123', attributeList, null, function (err, result) {
         if (err) {
             console.log(err);
             callback(err);
