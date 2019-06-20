@@ -118,7 +118,7 @@ function addUserToCognito(callback) {
 
     var params = {
         UserPoolId: 'eu-west-1_2DtCcoypN',
-        Username: email.replace("@", "__"), 
+        Username: email, 
         DesiredDeliveryMediums: [
             'EMAIL'            
         ],
