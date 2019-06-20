@@ -37,7 +37,7 @@ app.get('/api/v1/users', cors(), function(req, res, next) {
             console.log("getIDFromSub was successful");
             if (item === undefined) {
                 console.log("No Record returned")
-                outputError(res, 404, "4", "SpecifiedUser does not exist", error.desc);
+                outputError(res, 404, "4", "No record found", "A user with the specified alias does not exist");
             }
             else {
            
