@@ -8,13 +8,13 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const app = express()
 const fetch = require('node-fetch')
+const PORT = 3000;
 
 var sub = "";
 var id = 0;
 var email = "";
 var fullname = "";
 var tenant = "";
-
 
 AWS.config.update({ endpoint: "https://dynamodb.eu-west-1.amazonaws.com" });
 
@@ -97,10 +97,21 @@ app.post('/api/v1/users', cors(), function (req, res, next) {
             outputError(res, 400, "5", "Error adding user to the directory", error.message);
         }
         else {
-            console.log("User added successfully");
-            res.status(200).send("{ 'status' : '" + item.User.Username + "'}");
-        }
+            console.log("User added to Cognito successfully");
+            sub = item.User.Username;
 
+            addUser(function (error, item) {
+                if (error) {
+                    console.log("Couldn't add user to DynamoDB");
+                    console.log(error);
+                    outputError(res, 400, "6", "Error adding user to the database", error.message);
+                }
+                else {
+                    console.log("User added to DynamoDB successfully");
+                    res.status(200).send("{ 'username' : '" + item.User.Username + "'}");
+                }
+            });                        
+        }
     });   
 
 });
@@ -109,7 +120,7 @@ function addUserToCognito(callback) {
 
     const poolData = {
         UserPoolId: "eu-west-1_2DtCcoypN",    
-        ClientId: "57vo0lcv2gq0822td26v9nhnh6" // Your client id here
+        ClientId: "57vo0lcv2gq0822td26v9nhnh6"
     }; 
 
     AWS.config.update({ endpoint: "cognito-idp.eu-west-1.amazonaws.com" });
@@ -190,6 +201,9 @@ function outputError(res, status, code, short, desc) {
 function getIdFromSub(callback) {
 
     console.log("Entering getIDFromSub");
+
+    AWS.config.update({ endpoint: "https://dynamodb.eu-west-1.amazonaws.com" });
+
     var params = {
         TableName: "KFPNextGenUsers",
         IndexName: "sub-index",
@@ -223,7 +237,9 @@ function getIdFromSub(callback) {
 
 function getUser(callback) {
 
-    console.log("Entering getUser")
+    console.log("Entering getUser");
+
+    AWS.config.update({ endpoint: "https://dynamodb.eu-west-1.amazonaws.com" });
 
     var params = {
         TableName: "KFPNextGenUsers",
@@ -252,7 +268,38 @@ function getUser(callback) {
 
 };
 
-const PORT = 3000;
+
+function addUser(callback) {
+
+    console.log("Entering addUser");
+
+    AWS.config.update({ endpoint: "https://dynamodb.eu-west-1.amazonaws.com" });
+
+    var params = {
+        TableName: "KFPNextGenUsers",
+        Item: {
+            'name': { S: fullname },
+            'sub': { S: sub },
+            'tenant': { S: tenant },
+        }
+    };
+
+    docClient.putItem(params, function (err, data) {
+        if (err) {
+            console.log("Query in in error");
+            callback(err)
+        } else {
+            console.log("Query succeeded.");
+            console.log(JSON.stringify(data));
+            callback(null, data);
+        }
+    });
+
+    console.log("Leaving addUser");
+
+};
+
+
 
 app.listen(PORT, () => {
     console.log(`server running on port ${PORT}`)
