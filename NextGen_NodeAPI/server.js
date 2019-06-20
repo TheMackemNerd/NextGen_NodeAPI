@@ -2,6 +2,7 @@
 var http = require('http');
 var AWS = require("aws-sdk")
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js')
+const fetch = require('node-fetch');
 const CognitoUserPool = AmazonCognitoIdentity.CognitoUserPool
 const express = require('express')
 const bodyParser = require('body-parser')
