@@ -112,7 +112,7 @@ function addUserToCognito(callback) {
         ClientId: "57vo0lcv2gq0822td26v9nhnh6" // Your client id here
     }; 
 
-    const pool_region = 'eu-west-1';
+    AWS.Config.region = 'eu-west-1';
     const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
     var params = {
