@@ -128,7 +128,7 @@ function addUserToCognito(callback) {
             },
             {
                 Name: 'custom.tenant',
-                value: tenant
+                Value: tenant
             }
         ]
     };
