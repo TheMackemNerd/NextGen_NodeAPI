@@ -35,25 +35,32 @@ app.get('/api/v1/users', cors(), function(req, res, next) {
         }
         else {
             console.log("getIDFromSub was successful");
-            console.log(item.id);
-            id = item.id;
+            if (item === undefined) {
+                console.log("No Record returned")
+                outputError(res, 404, "4", "SpecifiedUser does not exist", error.desc);
+            }
+            else {
+           
+                console.log(item.id);
+                id = item.id;
 
-            console.log("About to call getUser");
-            getUser(function (error, item) {
-                if (error) {
-                    console.log("getUser is in error");
-                    outputError(res, 404, "3", "Error getting user details", error.desc);  
-                    console.log(error);
-                }
-                else {
-                    console.log("getUser was successful");
-                    console.log(item.name);
+                console.log("About to call getUser");
+                getUser(function (error, item) {
+                    if (error) {
+                        console.log("getUser is in error");
+                        outputError(res, 404, "3", "Error getting user details", error.desc);  
+                        console.log(error);
+                    }
+                    else {
+                        console.log("getUser was successful");
+                        console.log(item.name);
 
-                    res.status(200).send(JSON.stringify(item));
+                        res.status(200).send(JSON.stringify(item));
 
-                }
+                    }
 
-            });
+                });
+            }
 
         }
     });
