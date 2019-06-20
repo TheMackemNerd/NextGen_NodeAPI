@@ -126,11 +126,13 @@ function addUserToCognito(callback) {
             {
                 Name: 'email', /* required */
                 Value: email
-            },
+            }
+            /*
             {
                 Name: 'custom.tenant',
                 Value: tenant
             }
+            */
         ]
     };
 
