@@ -2,7 +2,7 @@
 var http = require('http');
 var AWS = require("aws-sdk")
 const express = require('express')
-const bodyParser = require('body-parser')
+//const bodyParser = require('body-parser')
 const cors = require('cors')
 const app = express()
 
@@ -20,7 +20,6 @@ app.use(function (req, res, next) {
 });
 
 app.use(cors());
-
 app.options('*', cors());
 
 app.get('/api/v1/users', cors(), function(req, res, next) {
@@ -75,11 +74,13 @@ app.get('/api/v1/users', cors(), function(req, res, next) {
 
 app.post('/api/v1/users', cors(), function (req, res, next) {
 
+    /*
     var email = req.body.emailaddress;
     var fullname = req.body.fullname;
     var tenant = req.body.tenant;
 
     console.log(email + " " + fullname + " " + tenant);
+    */
 
     res.status(200).send();
 
