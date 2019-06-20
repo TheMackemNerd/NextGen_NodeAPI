@@ -112,7 +112,7 @@ function addUserToCognito(callback) {
         ClientId: "57vo0lcv2gq0822td26v9nhnh6" // Your client id here
     }; 
 
-    AWS.config.update({ endpoint: "https://cognito.eu-west-1.amazonaws.com" });
+    AWS.config.update({ endpoint: "cognito-idp.eu-west-1.amazonaws.com" });
     AWS.config.region = 'eu-west-1';
     const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
