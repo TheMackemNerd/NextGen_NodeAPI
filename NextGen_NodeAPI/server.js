@@ -94,7 +94,7 @@ app.post('/api/v1/users', cors(), function (req, res, next) {
         if (error) {
             console.log("Couldn't add user to Cognito");
             console.log(error);
-            outputError(res, 400, "5", "Error adding user to the directory", error.desc);
+            outputError(res, 400, "5", "Error adding user to the directory", error.message);
         }
         else {
             console.log("User added successfully");
