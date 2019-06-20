@@ -18,6 +18,8 @@ app.use(function (req, res, next) {
     next();
 });
 
+app.options('/api/v1/users', cors());
+
 app.get('/api/v1/users', cors(), function(req, res, next) {
 
     sub = req.query.sub;
