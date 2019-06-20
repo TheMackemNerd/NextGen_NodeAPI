@@ -2,6 +2,7 @@
 var http = require('http');
 var AWS = require("aws-sdk")
 const express = require('express')
+const bodyParser = require('body-parser')
 const cors = require('cors')
 const app = express()
 
@@ -19,7 +20,7 @@ app.use(function (req, res, next) {
 });
 
 app.use(cors());
-app.use(express.bodyParser());
+app.use(bodyParser());
 
 
 app.options('*', cors());
