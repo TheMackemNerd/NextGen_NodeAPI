@@ -240,7 +240,6 @@ function getUser(callback) {
     console.log("Entering getUser");
 
     AWS.config.update({ endpoint: "https://dynamodb.eu-west-1.amazonaws.com" });
-    var ddb = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
 
     var params = {
         TableName: "KFPNextGenUsers",
@@ -253,7 +252,7 @@ function getUser(callback) {
         }
     };
 
-    ddb.query(params, function (err, data) {
+    docClient.query(params, function (err, data) {
         if (err) {
             console.log("Query in in error");
             callback(err)
@@ -275,6 +274,7 @@ function addUser(callback) {
     console.log("Entering addUser");
 
     AWS.config.update({ endpoint: "https://dynamodb.eu-west-1.amazonaws.com" });
+    var ddb = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
 
     var params = {
         TableName: "KFPNextGenUsers",
@@ -285,13 +285,13 @@ function addUser(callback) {
         }
     };
 
-    docClient.putItem(params, function (err, data) {
+    ddb.putItem(params, function (err, data) {
         if (err) {
             console.log("Query in in error");
             callback(err)
         } else {
             console.log("Query succeeded.");
-            console.log(JSON.stringify(data));
+            console.log(JSON.stringify);
             callback(null, data);
         }
     });
