@@ -128,9 +128,9 @@ function addUserToCognito(callback) {
 
         var cognitoUser = result.user;
         console.log('user name is ' + cognitoUser.getUsername());
-    });
+        callback(null, cognitoUser.getUsername());
 
-    callback(null,cognitoUser.getUsername());
+    });    
 
 }
 
