@@ -103,7 +103,8 @@ app.get('/api/v1/tenants', cors(), function (req, res) {
 
         if (error) {
             outputError(res, 400, "1", "missing information", "Cannot determine user's tenant from the directory. " + error);
-            return false;        }
+            return false;
+        }
         else {
 
             var xtenant = JSON.parse(result)['custom:tenant'];
@@ -207,7 +208,7 @@ function checkUserInfoInCognito(accesstoken, callback) {
 
     }
 
-});
+}
 
 
 function addUserToCognito(callback) {
