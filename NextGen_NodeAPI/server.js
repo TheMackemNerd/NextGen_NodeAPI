@@ -110,7 +110,7 @@ app.post('/api/v1/users', cors(), function (req, res, next) {
                 }
                 else {
                     console.log("User added to DynamoDB successfully");
-                    res.status(200).send("{ 'KFP Database ID' : '" + userid + "', 'Directory ID: '" + sub + "'}");
+                    res.status(200).send("{ 'KFP Database ID' : '" + userid + "', 'Directory ID': '" + sub + "'}");
                 }
             });                        
         }
