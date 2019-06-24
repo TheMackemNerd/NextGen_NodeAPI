@@ -206,7 +206,7 @@ function getIdFromSub(callback) {
     AWS.config.update({ endpoint: "https://dynamodb.eu-west-1.amazonaws.com" });
 
     var params = {
-        TableName: "KFPNextGenUsers",
+        TableName: "KFPNGUsers",
         IndexName: "sub-index",
         KeyConditionExpression: "#sub = :xxx",
         ExpressionAttributeNames: {
@@ -243,7 +243,7 @@ function getUser(callback) {
     AWS.config.update({ endpoint: "https://dynamodb.eu-west-1.amazonaws.com" });
 
     var params = {
-        TableName: "KFPNextGenUsers",
+        TableName: "KFPNGUsers",
         KeyConditionExpression: "#id = :n",
         ExpressionAttributeNames: {
             "#id": "id"
@@ -278,7 +278,7 @@ function addUser(callback) {
     var ddb = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
 
     var params = {
-        TableName: "KFPNextGenUsers",
+        TableName: "KFPNGUsers",
         Item: {
             'id': { S: uuidv4() },
             'name': { S: fullname },
