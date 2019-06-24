@@ -92,26 +92,42 @@ app.get('/api/v1/tenants', cors(), function (req, res) {
         return false;
     }
 
-    console.log(req.header.x-tenant);
-    var xtenant = req.header("x-tenant");
+    var accesstoken = req.header("Authorization");
 
-    if (isNaN(xtenant)) {
-        outputError(res, 400, "1", "missing identifier", "The X-tenant header was not provided");
+    if (isNaN(accesstoken)) {
+        outputError(res, 400, "1", "missing information", "The Authorization header was not provided");
         return false;
     }
 
-    if (xtenant != id) {
-        outputError(res, 400, "1", "Tenancy mis-match", "You are attempting to retrieve data from a tenancy other than your own");
-        return false;
-    }
+    checkUserInfoInCognito(accesstoken, function (error, result) {
 
-
-    getTenant(id, function (error, item) {
         if (error) {
-            outputError(res, 404, "8", "Error getting Data", error.desc);
-        }
+            outputError(res, 400, "1", "missing information", "Cannot determine user's tenant from the directory. " + error);
+            return false;        }
         else {
-            res.status(200).send(JSON.stringify(item));
+
+            var xtenant = JSON.parse(result)['custom:tenant'];
+
+            if (isNaN(xtenant)) {
+                outputError(res, 400, "1", "missing information", "Cannot determine user's tenant from the directory");
+                return false;
+            }
+
+            if (xtenant != id) {
+                outputError(res, 400, "1", "Tenancy mis-match", "You are attempting to retrieve data from a tenancy other than your own");
+                return false;
+            }
+
+
+            getTenant(id, function (error, item) {
+                if (error) {
+                    outputError(res, 404, "8", "Error getting Data", error.desc);
+                }
+                else {
+                    res.status(200).send(JSON.stringify(item));
+                }
+
+            });
         }
 
     });
@@ -166,6 +182,33 @@ app.post('/api/v1/users', cors(), function (req, res, next) {
     });   
 
 });
+
+function checkUserInfoInCognito(accesstoken, callback) {
+
+    var request = new XMLHttpRequest();
+
+    console.log("Preparing to call API");
+    request.open('GET', 'https://hcm-hub-rnd.auth.eu-west-1.amazoncognito.com/oauth2/userInfo', true);
+    request.setRequestHeader("Authorization", 'Bearer ' + accesstoken);
+    request.setRequestHeader("Content-Type", "application/json");
+    request.onload = function () {
+
+        if (request.status != 200) {
+            console.log("The API returned an error");
+            var err = JSON.parse(this.response).message;
+            console.log(err);
+            callback(err)
+        }
+        else {
+            console.log("API call Success");
+            var data = this.response;
+            callback(null, data)
+        }
+
+    }
+
+});
+
 
 function addUserToCognito(callback) {
 
