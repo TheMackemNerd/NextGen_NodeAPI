@@ -8,6 +8,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const app = express()
 const fetch = require('node-fetch')
+const uuidv4 = require('uuid/v4')
 const PORT = 3000;
 
 var sub = "";
@@ -279,6 +280,7 @@ function addUser(callback) {
     var params = {
         TableName: "KFPNextGenUsers",
         Item: {
+            'id': { S: uuidv4() },
             'name': { S: fullname },
             'sub': { S: sub },
             'tenant': { S: tenant },
