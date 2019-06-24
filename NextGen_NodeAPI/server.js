@@ -94,7 +94,7 @@ app.get('/api/v1/tenants', cors(), function (req, res) {
 
     sub = req.header.sub;
 
-    if (id === undefined) {
+    if (sub === undefined) {
         outputError(res, 400, "1", "missing identifier", "The X-Sub header was not provided");
         return false;
     }
