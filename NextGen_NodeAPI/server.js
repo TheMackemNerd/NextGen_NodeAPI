@@ -82,6 +82,28 @@ app.get('/api/v1/users', cors(), function(req, res, next) {
 
 });
 
+
+app.get('/api/v1/tenants', cors(), function (req, res) {
+
+    id = req.query.id;
+
+    if (id === undefined) {
+        outputError(res, 400, "1", "missing identifier", "The tenant ID was not provided");
+    }
+
+    getTenant(id, function (error, item) {
+        if (error) {
+            outputError(res, 404, "8", "Error getting Data", error.desc);
+        }
+        else {
+            res.status(200).send(JSON.stringify(item));
+        }
+
+    });
+
+}
+
+
 app.post('/api/v1/users', cors(), function (req, res, next) {
 
     res.header("Access-Control-Allow-Origin", "*");
@@ -279,6 +301,40 @@ function getUser(callback) {
     });
 
     console.log("Leaving getUser");
+
+};
+
+
+function getTenant(id, callback) {
+
+    console.log("Entering getTenant");
+
+    AWS.config.update({ endpoint: "https://dynamodb.eu-west-1.amazonaws.com" });
+
+    var params = {
+        TableName: "KFPNGTenantData",
+        KeyConditionExpression: "#id = :n",
+        ExpressionAttributeNames: {
+            "#id": "id"
+        },
+        ExpressionAttributeValues: {
+            ":n": id
+        }
+    };
+
+    docClient.query(params, function (err, data) {
+        if (err) {
+            console.log("Query in in error");
+            callback(err)
+        } else {
+            console.log("Query succeeded.");
+            var item = data.Items[0];
+            console.log("Query result: " + JSON.stringify(item, null, 2));
+            callback(null, item);
+        }
+    });
+
+    console.log("Leaving getTenant");
 
 };
 
