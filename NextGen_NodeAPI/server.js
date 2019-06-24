@@ -92,14 +92,15 @@ app.get('/api/v1/tenants', cors(), function (req, res) {
         return false;
     }
 
-    tenant = req.header.x-tenant;
+    console.log(req.header.x-tenant);
+    var xtenant = req.header.x-tenant;
 
-    if (tenant === undefined) {
+    if (xtenant == '') {
         outputError(res, 400, "1", "missing identifier", "The X-tenant header was not provided");
         return false;
     }
 
-    if (tenant != id) {
+    if (xtenant != id) {
         outputError(res, 400, "1", "Tenancy mis-match", "You are attempting to retrieve data from a tenancy other than your own");
         return false;
     }
