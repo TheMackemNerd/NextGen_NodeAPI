@@ -84,6 +84,9 @@ app.get('/api/v1/users', cors(), function(req, res, next) {
 
 app.post('/api/v1/users', cors(), function (req, res, next) {
 
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
     console.log("Getting body values");
     console.log("Inbound Request: " + req.body);
     
