@@ -85,9 +85,18 @@ app.get('/api/v1/users', cors(), function(req, res, next) {
 app.post('/api/v1/users', cors(), function (req, res, next) {
 
     console.log("Getting body values");
-    email = req.body.emailaddress;
-    fullname = req.body.fullname;
-    tenant = req.body.tenant;
+    console.log("Inbound Request: " + req.body);
+    
+    try {
+        email = req.body.emailaddress;
+        fullname = req.body.fullname;
+        tenant = req.body.tenant;
+    }
+    catch(err)
+    {
+        outputError(res, 400, "7", "Error adding user to the directory", err.message);
+        return false;
+    }
 
     console.log(email + " " + fullname + " " + tenant);
 
