@@ -207,6 +207,7 @@ function getIdFromSub(callback) {
 
     var params = {
         TableName: "KFPNGUsers",
+        IndexName: "sub-index",
         KeyConditionExpression: "#sub = :xxx",
         ExpressionAttributeNames: {
             "#sub": "sub"
