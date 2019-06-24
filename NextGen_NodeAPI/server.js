@@ -89,7 +89,21 @@ app.get('/api/v1/tenants', cors(), function (req, res) {
 
     if (id === undefined) {
         outputError(res, 400, "1", "missing identifier", "The tenant ID was not provided");
+        return false;
     }
+
+    sub = req.header.x-sub;
+
+    if (id === undefined) {
+        outputError(res, 400, "1", "missing identifier", "The X-Sub header was not provided");
+        return false;
+    }
+
+    if (x - sub != id) {
+        outputError(res, 400, "1", "Tenancy mis-match", "You are attempting to retrieve data from a tenancy other than your own");
+        return false;
+    }
+
 
     getTenant(id, function (error, item) {
         if (error) {
