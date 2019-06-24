@@ -100,8 +100,9 @@ app.post('/api/v1/users', cors(), function (req, res, next) {
         else {
             console.log("User added to Cognito successfully");
             sub = item.User.Username;
+            var userid = uuidv4();
 
-            addUser(function (error, item) {
+            addUser(userid, function (error, item) {
                 if (error) {
                     console.log("Couldn't add user to DynamoDB");
                     console.log(error);
@@ -109,9 +110,7 @@ app.post('/api/v1/users', cors(), function (req, res, next) {
                 }
                 else {
                     console.log("User added to DynamoDB successfully");
-                    console.log(JSON.stringify(item));
-
-                    res.status(200).send("{ 'KFP Database ID' : '" + JSON.stringify(item) + "', 'Directory ID: '" + sub + "'}");
+                    res.status(200).send("{ 'KFP Database ID' : '" + userid + "', 'Directory ID: '" + sub + "'}");
                 }
             });                        
         }
@@ -272,7 +271,7 @@ function getUser(callback) {
 };
 
 
-function addUser(callback) {
+function addUser(userid, callback) {
 
     console.log("Entering addUser");
 
@@ -282,7 +281,7 @@ function addUser(callback) {
     var params = {
         TableName: "KFPNGUsers",
         Item: {
-            'id': { S: uuidv4() },
+            'id': { S: userid},
             'name': { S: fullname },
             'sub': { S: sub },
             'tenant': { S: tenant },
