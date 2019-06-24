@@ -101,7 +101,7 @@ app.get('/api/v1/tenants', cors(), function (req, res) {
 
     });
 
-}
+});
 
 
 app.post('/api/v1/users', cors(), function (req, res, next) {
