@@ -93,9 +93,9 @@ app.get('/api/v1/tenants', cors(), function (req, res) {
     }
 
     console.log(req.header.x-tenant);
-    var xtenant = req.header.x-tenant;
+    var xtenant = req.header("x-tenant");
 
-    if (xtenant == '') {
+    if (isNaN(xtenant) {
         outputError(res, 400, "1", "missing identifier", "The X-tenant header was not provided");
         return false;
     }
