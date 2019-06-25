@@ -298,7 +298,7 @@ function addUserToCognito(callback) {
 
 
 
-function outputError(res, status, code, short, desc) {
+function outputError(res, statusCode, code, short, desc) {
 
     var body = {
         code: code,
@@ -306,7 +306,7 @@ function outputError(res, status, code, short, desc) {
         message: desc
     };
 
-    res.status(status).send(JSON.stringify(body));
+    res.status(parseInt(statusCode,10)).send(JSON.stringify(body));
 
 }
 
