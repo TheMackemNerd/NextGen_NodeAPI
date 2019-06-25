@@ -42,15 +42,7 @@ app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader("Access-Control-Allow-Headers", "Origin,Accept,X-USER,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-
-    if ('OPTIONS' == req.method) {
-        console.log("Options match");
-        res.send(200);
-    } else {
-        console.log("Not an Options request");
-        next();
-    }
-
+    next();
 })
 
 app.options('*', (req, res) => {
