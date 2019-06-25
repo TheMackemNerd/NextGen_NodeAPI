@@ -94,7 +94,7 @@ app.get('/api/v1/tenants', cors(), function (req, res) {
 
     var sub = req.header("X-USER");
     console.log("X-USER: ");
-    console.log(accesstoken);
+    console.log(sub);
 
     if (sub == undefined) {
         outputError(res, 400, "1", "missing information", "The User was not provided");
