@@ -147,6 +147,8 @@ app.get('/api/v1/tenants', function (req, res) {
                             return false;
                         }
 
+                        console.log("Comparing: Tenant: " + tenant + " with ID: " + id);
+
                         if (tenant != id) {
                             outputError(res, 401, "10", "Unauthorized", "Attempting to retrieve data from a tenant the user does not belong to");
                             return false;
