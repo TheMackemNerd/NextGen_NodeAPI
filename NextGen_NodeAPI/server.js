@@ -46,6 +46,7 @@ app.use(function (req, res, next) {
 })
 
 app.options('*', (req, res) => {
+    console.log("Here");
     res.json({
         status: 'OK'
     });
