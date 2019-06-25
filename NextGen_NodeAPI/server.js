@@ -10,6 +10,9 @@ const app = express()
 const fetch = require('node-fetch')
 const uuidv4 = require('uuid/v4')
 const PORT = 3000;
+const corsOptions = {
+    allowedHeaders: "X-USER,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+};
 
 var sub = "";
 var id = 0;
@@ -31,9 +34,9 @@ app.use(function (req, res, next) {
 app.use(cors());
 app.use(bodyParser.json());                        
 
-app.options('*', cors());
+app.options('*', cors(corsOptions));
 
-app.get('/api/v1/users', cors(), function(req, res, next) {
+app.get('/api/v1/users', cors(corsOptions), function(req, res, next) {
 
     sub = req.query.sub;
 
@@ -82,10 +85,6 @@ app.get('/api/v1/users', cors(), function(req, res, next) {
 
 
 });
-
-const corsOptions = {
-    allowedHeaders: "X-USER,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",    
-};
 
 app.get('/api/v1/tenants', cors(corsOptions), function (req, res) {
 
