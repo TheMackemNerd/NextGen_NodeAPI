@@ -5,17 +5,10 @@ const AmazonCognitoIdentity = require('amazon-cognito-identity-js-with-node-fetc
 const CognitoUserPool = AmazonCognitoIdentity.CognitoUserPool
 const express = require('express')
 const bodyParser = require('body-parser')
-const cors = require('cors')
 const app = express()
 const fetch = require('node-fetch')
 const uuidv4 = require('uuid/v4')
 const PORT = 3000;
-const corsOptions = {
-    'allowedHeaders': "X-USER,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
-    'origin': '*',
-    'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    'preflightContinue': false
-};
 
 var sub = "";
 var id = 0;
@@ -28,16 +21,11 @@ AWS.config.update({ endpoint: "https://dynamodb.eu-west-1.amazonaws.com" });
 var dynamodb = new AWS.DynamoDB({ region: 'eu-west-1' });
 var docClient = new AWS.DynamoDB.DocumentClient({ service: dynamodb });
 
-app.use(function (req, res, next) {
-    res.header('Content-Type', 'application/json');
-    next();
-});
-
-app.use(cors());
 app.use(bodyParser.json());                        
 
 app.use(function (req, res, next) {
     console.log("Setting headers");
+    res.setHeader('Content-Type', 'application/json');
     res.setHeader("Access-Control-Allow-Origin", '*');
     res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader("Access-Control-Allow-Headers", "Origin,Accept,X-USER,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
@@ -54,7 +42,7 @@ app.options('*', (req, res) => {
 
 //app.options('*', cors(corsOptions));
 
-app.get('/api/v1/users', cors(), function(req, res, next) {
+app.get('/api/v1/users', function(req, res, next) {
 
     sub = req.query.sub;
 
@@ -104,7 +92,7 @@ app.get('/api/v1/users', cors(), function(req, res, next) {
 
 });
 
-app.get('/api/v1/tenants', cors(), function (req, res) {
+app.get('/api/v1/tenants', function (req, res) {
 
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-USER, Origin, X-Requested-With, Content-Type, Accept");
@@ -196,7 +184,7 @@ app.get('/api/v1/tenants', cors(), function (req, res) {
 });
 
 
-app.post('/api/v1/users', cors(), function (req, res, next) {
+app.post('/api/v1/users', function (req, res, next) {
 
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
