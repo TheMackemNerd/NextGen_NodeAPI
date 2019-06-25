@@ -40,15 +40,15 @@ app.get('/api/v1/users', cors(), function(req, res, next) {
         outputError(res, 400, "1", "missing identifier","The sub parameter was not provided");
     }
 
-    console.log("About to call getIDFromSub");
-    getIdFromSub(function (error, item) {
+    console.log("About to call getUserFromSub");
+    getUserFromSub(function (error, item) {
         if (error) {
-            console.log("getIDFromSub is in error");
+            console.log("getUserFromSub is in error");
             console.log(error);
             outputError(res, 404, "2", "Error getting user ID", error.desc);                        
         }
         else {
-            console.log("getIDFromSub was successful");
+            console.log("getUserFromSub was successful");
             if (item === undefined) {
                 console.log("No Record returned")
                 outputError(res, 404, "4", "No record found", "A user with the specified alias does not exist");
@@ -92,48 +92,60 @@ app.get('/api/v1/tenants', cors(), function (req, res) {
         return false;
     }
 
-    var sub = req.header("X-USER");
-    console.log("X-USER: ");
-    console.log(sub);
+    sub = req.header("X-USER");
+    console.log("X-USER: " + sub);
 
     if (sub == undefined) {
-        outputError(res, 400, "1", "missing information", "The User was not provided");
+        outputError(res, 400, "1", "missing information", "The User was not passed from the directory");
         return false;
     }
 
-    checkUserInfoInCognito(accesstoken, function (error, result) {
-
+    console.log("About to call getUserFromSub");
+    getUserFromSub(function (error, item) {
         if (error) {
-            outputError(res, 400, "1", "missing information", "Cannot determine user's tenant from the directory. " + error);
+            console.log("getUserFromSub is in error");
+            console.log(error);
+            outputError(res, 404, "2", "Error matching the ID of the user from the Directory identifier provided", error.desc);
             return false;
         }
         else {
-
-            var xtenant = JSON.parse(result)['custom:tenant'];
-
-            if (isNaN(xtenant)) {
-                outputError(res, 400, "1", "missing information", "Cannot determine user's tenant from the directory");
+            console.log("getUserFromSub was successful");
+            if (item === undefined) {
+                console.log("No Record returned")
+                outputError(res, 404, "4", "No record found", "A user with the specified alias does not exist");
                 return false;
             }
+            else {
 
-            if (xtenant != id) {
-                outputError(res, 400, "1", "Tenancy mis-match", "You are attempting to retrieve data from a tenancy other than your own");
-                return false;
+                console.log(item.tenant);
+                tenant = item.tenant;
+
+                if (tenant === undefined) {
+                    outputError(res, 404, "9", "Missing Information", "The user is not associated with a Tenant");
+                    return false;
+                }
+
+                if (tenant != id) {
+                    outputError(res, 401, "10", "Unauthorized", "Attempting to retrieve data from a tenant the user does not belong to");
+                    return false;
+                }
+
+                console.log("About to call getTenant");
+                getTenant(tenant, function (error, item) {
+                    if (error) {
+                        outputError(res, 404, "8", "Error getting Data", error.desc);
+                        return false;
+                    }
+                    else {
+                        res.status(200).send(JSON.stringify(item));
+                    }
+
+                });
             }
 
-
-            getTenant(id, function (error, item) {
-                if (error) {
-                    outputError(res, 404, "8", "Error getting Data", error.desc);
-                }
-                else {
-                    res.status(200).send(JSON.stringify(item));
-                }
-
-            });
         }
-
     });
+
 
 });
 
@@ -164,6 +176,7 @@ app.post('/api/v1/users', cors(), function (req, res, next) {
             console.log("Couldn't add user to Cognito");
             console.log(error);
             outputError(res, 400, "5", "Error adding user to the directory", error.message);
+            return false;
         }
         else {
             console.log("User added to Cognito successfully");
@@ -175,6 +188,7 @@ app.post('/api/v1/users', cors(), function (req, res, next) {
                     console.log("Couldn't add user to DynamoDB");
                     console.log(error);
                     outputError(res, 400, "6", "Error adding user to the database", error.message);
+                    return false;
                 }
                 else {
                     console.log("User added to DynamoDB successfully");
@@ -185,32 +199,6 @@ app.post('/api/v1/users', cors(), function (req, res, next) {
     });   
 
 });
-
-function checkUserInfoInCognito(accesstoken, callback) {
-
-    var request = new XMLHttpRequest();
-
-    console.log("Preparing to call API");
-    request.open('GET', 'https://hcm-hub-rnd.auth.eu-west-1.amazoncognito.com/oauth2/userInfo', true);
-    request.setRequestHeader("Authorization", 'Bearer ' + accesstoken);
-    request.setRequestHeader("Content-Type", "application/json");
-    request.onload = function () {
-
-        if (request.status != 200) {
-            console.log("The API returned an error");
-            var err = JSON.parse(this.response).message;
-            console.log(err);
-            callback(err)
-        }
-        else {
-            console.log("API call Success");
-            var data = this.response;
-            callback(null, data)
-        }
-
-    }
-
-}
 
 
 function addUserToCognito(callback) {
@@ -295,9 +283,9 @@ function outputError(res, status, code, short, desc) {
 }
 
 
-function getIdFromSub(callback) {
+function getUserFromSub(callback) {
 
-    console.log("Entering getIDFromSub");
+    console.log("Entering getUserFromSub");
 
     AWS.config.update({ endpoint: "https://dynamodb.eu-west-1.amazonaws.com" });
 
@@ -328,7 +316,7 @@ function getIdFromSub(callback) {
 
     });
 
-    console.log("Leaving getIDFromSub");
+    console.log("Leaving getUserFromSub");
 
 };
 
