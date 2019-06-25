@@ -37,21 +37,23 @@ app.use(cors());
 app.use(bodyParser.json());                        
 
 app.use(function (req, res, next) {
+    console.log("Setting headers");
     res.setHeader("Access-Control-Allow-Origin", '*');
     res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Expose-Headers", "Set-Cookie");
-    res.setHeader("Access-Control-Allow-Headers", "X-USER, Content-Type, x-xsrf-token, X-Requested-With, Accept, Expires, Last-Modified, Cache-Control");
+    res.setHeader("Access-Control-Allow-Headers", "X-USER,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
 
     if ('OPTIONS' == req.method) {
+        console.log("Options match");
         res.send(200);
     } else {
+        console.log("Not an Options request");
         next();
     }
 
 })
 
-app.options('*', cors(corsOptions));
+//app.options('*', cors(corsOptions));
 
 app.get('/api/v1/users', cors(), function(req, res, next) {
 
