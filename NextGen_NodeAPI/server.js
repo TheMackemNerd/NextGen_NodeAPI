@@ -33,13 +33,27 @@ app.use(function (req, res, next) {
     next();
 });
 
-
 app.use(cors());
 app.use(bodyParser.json());                        
 
+app.use(function (req, res, next) {
+    res.setHeader("Access-Control-Allow-Origin", '*');
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Expose-Headers", "Set-Cookie");
+    res.setHeader("Access-Control-Allow-Headers", "X-USER, Content-Type, x-xsrf-token, X-Requested-With, Accept, Expires, Last-Modified, Cache-Control");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+
+    if ('OPTIONS' == req.method) {
+        res.send(200);
+    } else {
+        next();
+    }
+
+})
+
 app.options('*', cors(corsOptions));
 
-app.get('/api/v1/users', cors(corsOptions), function(req, res, next) {
+app.get('/api/v1/users', cors(), function(req, res, next) {
 
     sub = req.query.sub;
 
@@ -89,7 +103,7 @@ app.get('/api/v1/users', cors(corsOptions), function(req, res, next) {
 
 });
 
-app.get('/api/v1/tenants', cors(corsOptions), function (req, res) {
+app.get('/api/v1/tenants', cors(), function (req, res) {
 
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-USER, Origin, X-Requested-With, Content-Type, Accept");
