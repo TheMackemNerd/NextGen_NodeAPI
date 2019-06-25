@@ -40,15 +40,15 @@ app.get('/api/v1/users', cors(), function(req, res, next) {
         outputError(res, 400, "1", "missing identifier","The sub parameter was not provided");
     }
 
-    console.log("About to call getUserFromSub");
-    getUserFromSub(function (error, item) {
+    console.log("About to call getUserIdFromSub");
+    getUserIdFromSub(function (error, item) {
         if (error) {
-            console.log("getUserFromSub is in error");
+            console.log("getUserIdFromSub is in error");
             console.log(error);
             outputError(res, 404, "2", "Error getting user ID", error.desc);                        
         }
         else {
-            console.log("getUserFromSub was successful");
+            console.log("getUserIdFromSub was successful");
             if (item === undefined) {
                 console.log("No Record returned")
                 outputError(res, 404, "4", "No record found", "A user with the specified alias does not exist");
@@ -100,16 +100,16 @@ app.get('/api/v1/tenants', cors(), function (req, res) {
         return false;
     }
 
-    console.log("About to call getUserFromSub");
-    getUserFromSub(function (error, item) {
+    console.log("About to call getUserIdFromSub");
+    getUserIdFromSub(function (error, item) {
         if (error) {
-            console.log("getUserFromSub is in error");
+            console.log("getUserIdFromSub is in error");
             console.log(error);
             outputError(res, 404, "2", "Error matching the ID of the user from the Directory identifier provided", error.desc);
             return false;
         }
         else {
-            console.log("getUserFromSub was successful");
+            console.log("getUserIdFromSub was successful");
             if (item === undefined) {
                 console.log("No Record returned")
                 outputError(res, 404, "4", "No record found", "A user with the specified alias does not exist");
@@ -117,30 +117,48 @@ app.get('/api/v1/tenants', cors(), function (req, res) {
             }
             else {
 
-                console.log(item.tenant);
-                tenant = item.tenant;
-
-                if (tenant === undefined) {
-                    outputError(res, 404, "9", "Missing Information", "The user is not associated with a Tenant");
-                    return false;
-                }
-
-                if (tenant != id) {
-                    outputError(res, 401, "10", "Unauthorized", "Attempting to retrieve data from a tenant the user does not belong to");
-                    return false;
-                }
-
-                console.log("About to call getTenant");
-                getTenant(tenant, function (error, item) {
+                console.log("About to call getUser");
+                getUser(function (error, item) {
                     if (error) {
-                        outputError(res, 404, "8", "Error getting Data", error.desc);
+                        console.log("getUser is in error");
+                        outputError(res, 404, "3", "Error getting user details", error.desc);
+                        console.log(error);
                         return false;
                     }
                     else {
-                        res.status(200).send(JSON.stringify(item));
+                        console.log("getUser was successful");
+                        console.log(item.name);
+
+
+                        console.log(item.tenant);
+                        tenant = item.tenant;
+
+                        if (tenant === undefined) {
+                            outputError(res, 404, "9", "Missing Information", "The user is not associated with a Tenant");
+                            return false;
+                        }
+
+                        if (tenant != id) {
+                            outputError(res, 401, "10", "Unauthorized", "Attempting to retrieve data from a tenant the user does not belong to");
+                            return false;
+                        }
+
+                        console.log("About to call getTenant");
+                        getTenant(tenant, function (error, item) {
+                            if (error) {
+                                outputError(res, 404, "8", "Error getting Data", error.desc);
+                                return false;
+                            }
+                            else {
+                                res.status(200).send(JSON.stringify(item));
+                            }
+
+                        });
+
                     }
 
                 });
+
             }
 
         }
@@ -283,9 +301,9 @@ function outputError(res, status, code, short, desc) {
 }
 
 
-function getUserFromSub(callback) {
+function getUserIdFromSub(callback) {
 
-    console.log("Entering getUserFromSub");
+    console.log("Entering getUserIdFromSub");
 
     AWS.config.update({ endpoint: "https://dynamodb.eu-west-1.amazonaws.com" });
 
@@ -316,7 +334,7 @@ function getUserFromSub(callback) {
 
     });
 
-    console.log("Leaving getUserFromSub");
+    console.log("Leaving getUserIdFromSub");
 
 };
 
