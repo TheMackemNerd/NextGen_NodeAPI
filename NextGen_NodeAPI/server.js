@@ -118,7 +118,7 @@ app.get('/api/v1/tenants', cors(), function (req, res) {
             else {
 
                 console.log("About to call getUser");
-                getUser(function (error, item) {
+                getUser(function (error, item2) {
                     if (error) {
                         console.log("getUser is in error");
                         outputError(res, 404, "3", "Error getting user details", error.desc);
@@ -127,11 +127,11 @@ app.get('/api/v1/tenants', cors(), function (req, res) {
                     }
                     else {
                         console.log("getUser was successful");
-                        console.log(item.name);
+                        console.log(item2.name);
 
 
-                        console.log(item.tenant);
-                        tenant = item.tenant;
+                        console.log(item2.tenant);
+                        tenant = item2.tenant;
 
                         if (tenant === undefined) {
                             outputError(res, 404, "9", "Missing Information", "The user is not associated with a Tenant");
@@ -144,13 +144,14 @@ app.get('/api/v1/tenants', cors(), function (req, res) {
                         }
 
                         console.log("About to call getTenant");
-                        getTenant(tenant, function (error, item) {
+                        getTenant(tenant, function (error, item3) {
                             if (error) {
                                 outputError(res, 404, "8", "Error getting Data", error.desc);
                                 return false;
                             }
                             else {
-                                res.status(200).send(JSON.stringify(item));
+                                console.log("Success: " + item3);
+                                res.status(200).send(JSON.stringify(item3));
                             }
 
                         });
