@@ -85,6 +85,9 @@ app.get('/api/v1/users', cors(), function(req, res, next) {
 
 app.get('/api/v1/tenants', cors(), function (req, res) {
 
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
     id = req.query.id;
 
     if (id === undefined) {
