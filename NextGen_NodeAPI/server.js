@@ -127,7 +127,7 @@ app.get('/api/v1/tenants', cors(), function (req, res) {
                     }
                     else {
                         console.log("getUser was successful");
-                        console.log(item2.name);
+                        console.log(item2);                        
 
 
                         console.log(item2.tenant);
