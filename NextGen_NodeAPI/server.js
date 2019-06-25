@@ -92,8 +92,9 @@ app.get('/api/v1/tenants', function (req, res) {
     res.header("Access-Control-Allow-Headers", "X-USER, Origin, X-Requested-With, Content-Type, Accept");
 
     id = req.query.id;
+    console.log("ID: " + id);
 
-    if (id === undefined) {
+    if (id == undefined) {
         outputError(res, 400, "1", "missing identifier", "The tenant ID was not provided");
         return false;
     }
