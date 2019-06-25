@@ -11,7 +11,10 @@ const fetch = require('node-fetch')
 const uuidv4 = require('uuid/v4')
 const PORT = 3000;
 const corsOptions = {
-    allowedHeaders: "X-USER,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+    'allowedHeaders': "X-USER,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+    'origin': '*',
+    'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    'preflightContinue': false
 };
 
 var sub = "";
