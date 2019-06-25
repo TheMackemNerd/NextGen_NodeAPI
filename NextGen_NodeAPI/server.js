@@ -27,6 +27,7 @@ app.use(function (req, res, next) {
     next();
 });
 
+
 app.use(cors());
 app.use(bodyParser.json());                        
 
@@ -82,8 +83,11 @@ app.get('/api/v1/users', cors(), function(req, res, next) {
 
 });
 
+const corsOptions = {
+    allowedHeaders: "X-USER,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",    
+};
 
-app.get('/api/v1/tenants', cors(), function (req, res) {
+app.get('/api/v1/tenants', cors(corsOptions), function (req, res) {
 
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-USER, Origin, X-Requested-With, Content-Type, Accept");
