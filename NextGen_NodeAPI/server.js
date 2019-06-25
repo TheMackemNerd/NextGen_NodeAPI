@@ -92,12 +92,12 @@ app.get('/api/v1/tenants', cors(), function (req, res) {
         return false;
     }
 
-    var accesstoken = req.header("Authorization");
-    console.log("Authorization: ");
+    var sub = req.header("X-USER");
+    console.log("X-USER: ");
     console.log(accesstoken);
 
-    if (accesstoken == undefined) {
-        outputError(res, 400, "1", "missing information", "The Authorization header was not provided");
+    if (sub == undefined) {
+        outputError(res, 400, "1", "missing information", "The User was not provided");
         return false;
     }
 
