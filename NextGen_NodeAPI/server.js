@@ -59,7 +59,7 @@ app.get('/api/v1/users', cors(), function(req, res, next) {
                 id = item.id;
 
                 console.log("About to call getUser");
-                getUser(function (error, item) {
+                getUser(id, function (error, item) {
                     if (error) {
                         console.log("getUser is in error");
                         outputError(res, 404, "3", "Error getting user details", error.desc);  
@@ -118,7 +118,7 @@ app.get('/api/v1/tenants', cors(), function (req, res) {
             else {
 
                 console.log("About to call getUser");
-                getUser(function (error, item2) {
+                getUser(item.id, function (error, item2) {
                     if (error) {
                         console.log("getUser is in error");
                         outputError(res, 404, "3", "Error getting user details", error.desc);
@@ -127,8 +127,11 @@ app.get('/api/v1/tenants', cors(), function (req, res) {
                     }
                     else {
                         console.log("getUser was successful");
-                        console.log(item2);                        
 
+                        if (item2 == undefined) {
+                            outputError(res, 404, "9", "Missing Information", "User record cannot be found");
+                            return false;
+                        }                      
 
                         console.log(item2.tenant);
                         tenant = item2.tenant;
@@ -339,7 +342,7 @@ function getUserIdFromSub(callback) {
 
 };
 
-function getUser(callback) {
+function getUser(userid, callback) {
 
     console.log("Entering getUser");
 
@@ -352,7 +355,7 @@ function getUser(callback) {
             "#id": "id"
         },
         ExpressionAttributeValues: {
-            ":n": id
+            ":n": userid
         }
     };
 
