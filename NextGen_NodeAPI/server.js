@@ -92,11 +92,11 @@ app.get('/api/v1/tenants', cors(), function (req, res) {
         return false;
     }
 
-    var accesstoken = req.header("X-TYPE");
-    console.log("X-TYPE Header: ");
+    var accesstoken = req.header("Authorization");
+    console.log("Authorization: ");
     console.log(accesstoken);
 
-    if (isNaN(accesstoken)) {
+    if (accesstoken == undefined) {
         outputError(res, 400, "1", "missing information", "The Authorization header was not provided");
         return false;
     }
