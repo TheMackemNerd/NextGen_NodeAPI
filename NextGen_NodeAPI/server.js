@@ -40,7 +40,7 @@ app.use(function (req, res, next) {
     console.log("Setting headers");
     res.setHeader("Access-Control-Allow-Origin", '*');
     res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Allow-Headers", "X-USER,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
+    res.setHeader("Access-Control-Allow-Headers", "Origin,Accept,X-USER,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
 
     if ('OPTIONS' == req.method) {
@@ -52,6 +52,12 @@ app.use(function (req, res, next) {
     }
 
 })
+
+app.options('*', (req, res) => {
+    res.json({
+        status: 'OK'
+    });
+});
 
 //app.options('*', cors(corsOptions));
 
