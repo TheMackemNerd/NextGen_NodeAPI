@@ -4,6 +4,7 @@ var AWS = require("aws-sdk")
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js-with-node-fetch')
 const CognitoUserPool = AmazonCognitoIdentity.CognitoUserPool
 const express = require('express')
+const cors = require('cors')
 const bodyParser = require('body-parser')
 const app = express()
 const fetch = require('node-fetch')
@@ -33,14 +34,7 @@ app.use(function (req, res, next) {
     next();
 })
 
-app.options('*', (req, res) => {
-    console.log("Here");
-    res.json({
-        status: 'OK'
-    });
-});
-
-//app.options('*', cors(corsOptions));
+app.use(cors());
 
 app.get('/api/v1/users', function(req, res, next) {
 
