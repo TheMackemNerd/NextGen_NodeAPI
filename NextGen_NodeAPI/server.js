@@ -16,6 +16,7 @@ var id = 0;
 var email = "";
 var fullname = "";
 var tenant = "";
+var phone = "";
 
 AWS.config.update({ endpoint: "https://dynamodb.eu-west-1.amazonaws.com" });
 
@@ -193,6 +194,12 @@ app.post('/api/v1/users', function (req, res, next) {
         email = req.body.emailaddress;
         fullname = req.body.fullname;
         tenant = req.body.tenant;
+        phone = req.body.phone;
+
+        if (phone == undefined) {
+            phone = "";
+        }
+
     }
     catch(err)
     {
@@ -200,7 +207,7 @@ app.post('/api/v1/users', function (req, res, next) {
         return false;
     }
 
-    console.log(email + " " + fullname + " " + tenant);
+    console.log(email + " " + fullname + " " + tenant + " " + phone);
 
     addUserToCognito(function (error, item) {
         if (error) {
@@ -241,7 +248,6 @@ function addUserToCognito(callback) {
 
     AWS.config.update({ endpoint: "cognito-idp.eu-west-1.amazonaws.com" });
     AWS.config.region = 'eu-west-1';
-    const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
     var params = {
         UserPoolId: 'eu-west-1_2DtCcoypN',
@@ -253,6 +259,11 @@ function addUserToCognito(callback) {
             {
                 Name: 'email', /* required */
                 Value: email
+            },
+
+            {
+                Name: 'phone_number',
+                Value: phone
             },
             
             {
