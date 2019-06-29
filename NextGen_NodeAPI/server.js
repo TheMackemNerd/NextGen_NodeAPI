@@ -131,9 +131,9 @@ function getPhoneNumber(atts) {
     console.log(atts);
 
     for (var key in atts) {
-        console.log(key + " -> " + key.name + " : " + key.value);
-        if (key.name == "phone_number") {
-            return key.value;
+        console.log(key + " -> " + atts[key].Name + " : " + atts[key].Value);
+        if (atts[key].Name == "phone_number") {
+            return atts[key].Value;
         }
     }
 
