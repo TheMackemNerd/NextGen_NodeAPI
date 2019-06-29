@@ -140,10 +140,7 @@ app.get('/api/v1/users/me', cors(), function (req, res, next) {
 });
 
 
-app.get('/api/v1/tenants', function (req, res) {
-
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-USER, Origin, X-Requested-With, Content-Type, Accept");
+app.get('/api/v1/tenants', cors(), function (req, res) {
 
     id = req.query.id;
     console.log("ID: " + id);
