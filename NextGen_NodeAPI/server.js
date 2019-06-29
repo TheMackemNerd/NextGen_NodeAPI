@@ -126,14 +126,14 @@ app.get('/api/v1/users/me/mfa', cors(), function (req, res, next) {
     });
 });
 
-function getPhoneNumber(p) {
+function getPhoneNumber(atts) {
 
-    for (var key in p) {
-        if (p.hasOwnProperty(key)) {
-            console.log(key + " -> " + key.Name + " : " + key.Value);
-            if (key.Name == "phone_number") {
-                return key.Value;
-            }
+    console.log(atts);
+
+    for (var key in atts) {
+        console.log(key + " -> " + key.name + " : " + key.value);
+        if (key.name == "phone_number") {
+            return key.value;
         }
     }
 
