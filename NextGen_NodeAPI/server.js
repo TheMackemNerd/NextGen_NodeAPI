@@ -130,9 +130,9 @@ function getPhoneNumber(p) {
 
     for (var key in p) {
         if (p.hasOwnProperty(key)) {
-            console.log(key + " -> " + p.Name + " : " + p.Value);
-            if (p.Name == "phone_number") {
-                return p.Value;
+            console.log(key + " -> " + key.Name + " : " + key.Value);
+            if (key.Name == "phone_number") {
+                return key.Value;
             }
         }
     }
