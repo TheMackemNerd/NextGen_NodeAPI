@@ -108,6 +108,9 @@ app.get('/api/v1/users/me/mfa', cors(), function (req, res, next) {
             console.log(item.name);
 
             var mfa = item.MFAOptions;
+            var userAtts = item.UserAttributes;
+            getPhoneNumber(userAtts);
+
             var ret = "";
             console.log(ret);
             if (mfa == undefined) {
@@ -121,9 +124,17 @@ app.get('/api/v1/users/me/mfa', cors(), function (req, res, next) {
 
         }
     });
-
 });
 
+function getPhoneNumber(p) {
+
+    for (var key in p) {
+        if (p.hasOwnProperty(key)) {
+            console.log(key + " -> " + p[key]);
+        }
+    }
+
+}
 
 app.get('/api/v1/users/me', cors(), function (req, res, next) {
 
