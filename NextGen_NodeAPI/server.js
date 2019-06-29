@@ -107,7 +107,17 @@ app.get('/api/v1/users/me/mfa', cors(), function (req, res, next) {
             console.log("getCognitoUserData was successful");
             console.log(item.name);
 
-            res.status(200).send(JSON.stringify(item));
+            var mfa = JSON.parse(item).UserAttributes.MFAOptions;
+            var ret = "";
+            console.log(ret);
+            if (mfa == undefined) {
+                ret = "{'mfa_enabled':'false'}";
+            }
+            else {
+                ret = "{'mfa_enabled':'true'}";
+            }
+
+            res.status(200).send(ret);
 
         }
     });
