@@ -87,6 +87,59 @@ app.get('/api/v1/users', function(req, res, next) {
 
 });
 
+app.get('/api/v1/users/me', cors(), function (req, res, next) {
+
+    sub = req.header("X-USER");
+    console.log("X-USER: " + sub);
+
+    if (sub == undefined) {
+        outputError(res, 400, "1", "missing information", "The User was not passed from the directory");
+        return false;
+    }
+
+    console.log("About to call getUserIdFromSub");
+    getUserIdFromSub(function (error, item) {
+        if (error) {
+            console.log("getUserIdFromSub is in error");
+            console.log(error);
+            outputError(res, 404, "2", "Error getting user ID", error.desc);
+        }
+        else {
+            console.log("getUserIdFromSub was successful");
+            if (item === undefined) {
+                console.log("No Record returned")
+                outputError(res, 404, "4", "No record found", "A user with the specified alias does not exist");
+            }
+            else {
+
+                console.log(item.id);
+                id = item.id;
+
+                console.log("About to call getUser");
+                getUser(id, function (error, item) {
+                    if (error) {
+                        console.log("getUser is in error");
+                        outputError(res, 404, "3", "Error getting user details", error.desc);
+                        console.log(error);
+                    }
+                    else {
+                        console.log("getUser was successful");
+                        console.log(item.name);
+
+                        res.status(200).send(JSON.stringify(item));
+
+                    }
+
+                });
+            }
+
+        }
+    });
+
+
+});
+
+
 app.get('/api/v1/tenants', function (req, res) {
 
     res.header("Access-Control-Allow-Origin", "*");
