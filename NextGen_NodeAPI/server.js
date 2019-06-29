@@ -109,15 +109,15 @@ app.get('/api/v1/users/me/mfa', cors(), function (req, res, next) {
 
             var mfa = item.MFAOptions;
             var userAtts = item.UserAttributes;
-            getPhoneNumber(userAtts);
+            var phone = getPhoneNumber(userAtts);
 
             var ret = "";
             console.log(ret);
             if (mfa == undefined) {
-                ret = "{'mfa_enabled':'false'}";
+                ret = "{'mfa_enabled':'false', 'phone_number':'" + phone + "'}";
             }
             else {
-                ret = "{'mfa_enabled':'true'}";
+                ret = "{'mfa_enabled':'true', 'phone_number':'" + phone + "'}";
             }
 
             res.status(200).send(ret);
@@ -130,9 +130,14 @@ function getPhoneNumber(p) {
 
     for (var key in p) {
         if (p.hasOwnProperty(key)) {
-            console.log(key + " -> " + p[key]);
+            console.log(key + " -> " + p.Name + " : " + p.Value);
+            if (p.Name == "phone_number") {
+                return p.Value;
+            }
         }
     }
+
+    return "";
 
 }
 
