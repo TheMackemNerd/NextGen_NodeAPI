@@ -87,6 +87,34 @@ app.get('/api/v1/users', function(req, res, next) {
 
 });
 
+app.get('/api/v1/users/me/mfa', cors(), function (req, res, next) {
+
+    sub = req.header("X-USER");
+    console.log("X-USER: " + sub);
+
+    if (sub == undefined) {
+        outputError(res, 400, "1", "missing information", "The User was not passed from the directory");
+        return false;
+    }
+
+    getCognitoUserData(sub, function (error, item) {
+        if (error) {
+            console.log("getCognitoUserData is in error");
+            outputError(res, 404, "3", "Error getting user details from Cognito", error.desc);
+            console.log(error);
+        }
+        else {
+            console.log("getCognitoUserData was successful");
+            console.log(item.name);
+
+            res.status(200).send(JSON.stringify(item));
+
+        }
+    });
+
+});
+
+
 app.get('/api/v1/users/me', cors(), function (req, res, next) {
 
     sub = req.header("X-USER");
@@ -288,6 +316,29 @@ app.post('/api/v1/users', function (req, res, next) {
 
 });
 
+function getCognitoUserData(sub, callback) {
+
+    AWS.config.update({ endpoint: "cognito-idp.eu-west-1.amazonaws.com" });
+    AWS.config.region = 'eu-west-1';
+
+    var params = {
+        UserPoolId: 'eu-west-1_2DtCcoypN',
+        Username: sub
+    };
+
+    var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
+    cognitoidentityserviceprovider.adminGetUser(params, function (err, data) {
+        if (err) {
+            console.log(err);
+            callback(err);
+        }
+
+        console.log('user record: ' + JSON.stringify(data));
+        callback(null, data);
+
+    });
+
+}
 
 function addUserToCognito(callback) {
 
@@ -310,17 +361,14 @@ function addUserToCognito(callback) {
                 Name: 'email', /* required */
                 Value: email
             },
-
             {
                 Name: 'phone_number',
                 Value: phone
             },
-            
             {
                 Name: 'custom:tenant',
                 Value: tenant
-            }
-            
+            }      
         ]
     };
 
@@ -334,29 +382,7 @@ function addUserToCognito(callback) {
         console.log('user name is ' + JSON.stringify(data));
         callback(null, data);
 
-
     });
-
-
-    /*
-    var attributeList = [];
-    attributeList.push(new AmazonCognitoIdentity.CognitoUserAttribute({ Name: "email", Value: email }));
-    attributeList.push(new AmazonCognitoIdentity.CognitoUserAttribute({ Name: "custom:tenant", Value: tenant }));
-
-    cogSP.
-
-    userPool.signUp(email, 'SamplePassword_123', attributeList, null, function (err, result) {
-        if (err) {
-            console.log(err);
-            callback(err);
-        }
-
-        var cognitoUser = result.user;
-        console.log('user name is ' + cognitoUser.getUsername());
-        callback(null, cognitoUser.getUsername());
-
-    });
-    */   
 
 }
 
