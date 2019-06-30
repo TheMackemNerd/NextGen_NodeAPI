@@ -91,6 +91,9 @@ app.get('/api/v1/users/me/mfa', cors(), function (req, res, next) {
 
     sub = req.header("X-USER");
     console.log("X-USER: " + sub);
+    var key = req.header("Authorization");
+    console.log("Authorization: " + key);
+
 
     if (sub == undefined) {
         outputError(res, 400, "1", "missing information", "The User was not passed from the directory");
