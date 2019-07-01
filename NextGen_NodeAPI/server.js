@@ -89,6 +89,40 @@ app.get('/api/v1/users', function(req, res, next) {
 
 });
 
+app.put('/api/v1/users/me/mfa', cors(), function (req, res, next) {
+
+    sub = req.header("X-USER");
+    console.log("X-USER: " + sub);
+
+    var mfa_enabled = req.body.mfa_enabled;
+    console.log("mfa_enabled: " + mfa_enabled);
+    var phone_number = req.body.phone_number;
+    console.log("Phone number: " + phone_number);
+
+    if (sub == undefined) {
+        outputError(res, 400, "1", "missing information", "The User was not passed from the directory");
+    }
+
+    cognitoListUsers(sub, function (err, result) {
+        if (err) {
+            console.log("cognitoListUsers is in error: " + err);
+            outputError(res, 404, "3", "Error Listing users in Cognito", err.desc);
+        }
+        else {
+            cognitoSetMFAStatus(result, mfa_enabled, function (error, response) {
+                if (error) {
+                    console.log("cognitoSetMFAStatus is in error: " + error);
+                    outputError(res, 400, "3", "Error updating MFA Status", error.desc);
+                }
+                else {
+                    es.status(200).send();
+                }
+            });
+        }
+
+    });
+});
+
 app.get('/api/v1/users/me/mfa', cors(), function (req, res, next) {
 
     sub = req.header("X-USER");
@@ -368,6 +402,37 @@ app.post('/api/v1/users', function (req, res, next) {
     });   
 
 });
+ 
+function cognitoSetMFAStatus(username, status, callback) {
+
+    console.log("Searching for the User given a Sub");
+
+    AWS.config.update({ endpoint: "cognito-idp.eu-west-1.amazonaws.com" });
+    AWS.config.region = 'eu-west-1';
+
+    var params = {
+        UserPoolId: 'eu-west-1_2DtCcoypN',
+        Username: username,
+        SMSMfaSettings: {
+            Enabled: status,
+            PreferredMfa: true
+        }
+    };
+
+    var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
+    cognitoidentityserviceprovider.adminSetUserMFAPreference(params, function (err, data) {
+        if (err) {
+            console.log(err);
+            callback(err);
+        }
+        else {
+            callback(null, true);
+        }           
+
+    });
+
+}
+
 
 function cognitoListUsers(sub, callback) {
 
