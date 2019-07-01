@@ -97,6 +97,7 @@ app.put('/api/v1/users/me/mfa', jsonParser, function (req, res, next) {
     console.log("X-USER: " + sub);
 
     var mfa_enabled = (req.body.mfa_enabled === 'true');
+    var phoneNumber = req.body.phone_number;
 
     console.log("mfa_enabled: " + mfa_enabled);    
 
@@ -110,15 +111,28 @@ app.put('/api/v1/users/me/mfa', jsonParser, function (req, res, next) {
             outputError(res, 404, "3", "Error Listing users in Cognito", err.desc);
         }
         else {
-            cognitoSetMFAStatus(result, mfa_enabled, function (error, response) {
-                if (error) {
-                    console.log("cognitoSetMFAStatus is in error: " + error);
-                    outputError(res, 400, "3", "Error updating MFA Status", error.desc);
-                }
+
+            cognitoUpdatePhone(phoneNumber, function (err, response) {
+            if (err) {
+                console.log("cognitoUpdatePhone is in error: " + err);
+                outputError(res, 400, "3", "Error updating Phone Number Status", err.desc);
+            }
                 else {
-                    res.status(200).send();
-                }
+
+                cognitoSetMFAStatus(result, mfa_enabled, function (error, response) {
+                    if (error) {
+                        console.log("cognitoSetMFAStatus is in error: " + error);
+                        outputError(res, 400, "3", "Error updating MFA Status", error.desc);
+                    }
+                    else {
+                        res.status(200).send();
+                    }
+                });
+
+            }
+
             });
+
         }
 
     });
@@ -405,7 +419,38 @@ app.post('/api/v1/users', function (req, res, next) {
     });   
 
 });
- 
+
+function cognitoUpdatePhone(phoneNumber, callback) {
+
+    console.log("Setting User's Phone Number");
+
+    AWS.config.update({ endpoint: "cognito-idp.eu-west-1.amazonaws.com" });
+    AWS.config.region = 'eu-west-1';
+
+    var params = {
+        UserPoolId: 'eu-west-1_2DtCcoypN',
+        Username: username,
+        UserAttributes: {
+            Phone: phoneNumber,
+            phone_number_verified: true
+        }
+    };
+
+    var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
+    cognitoidentityserviceprovider.AdminUpdateUserAttributes(params, function (err, data) {
+        if (err) {
+            console.log(err);
+            callback(err);
+        }
+        else {
+            console.log("Phone Number Setting is Successful");
+            callback(null, true);
+        }
+
+    });
+
+}
+
 function cognitoSetMFAStatus(username, status, callback) {
 
     console.log("Setting MFA status");
