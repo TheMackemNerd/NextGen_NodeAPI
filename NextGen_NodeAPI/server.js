@@ -433,8 +433,7 @@ function cognitoUpdatePhone(username, phoneNumber, callback) {
             UserPoolId: 'eu-west-1_2DtCcoypN',
             Username: username,
             UserAttributes: {
-                phone_number: phoneNumber,
-                phone_number_verified: true
+                phone_number: phoneNumber
             }
         };
 
