@@ -101,37 +101,50 @@ app.get('/api/v1/users/me/mfa', cors(), function (req, res, next) {
         outputError(res, 400, "1", "missing information", "The User was not passed from the directory");
     }
 
-    getCognitoUserData(sub, function (error, item) {
+    cognitoListUsers(function (err, result) {
         if (error) {
-            console.log("getCognitoUserData is in error: " + error);
-            outputError(res, 404, "3", "Error getting user details from Cognito", error.desc);
+            console.log("cognitoListUsers is in error: " + err);
+            outputError(res, 404, "3", "Error Listing users in Cognito", error.desc);
         }
         else {
 
-            if (item == null) {
-                outputError(res, 404, "3", "Could not find user record in Cognito");
-                console.log("Item is null");
-            }
-            else {
-                console.log("getCognitoUserData was successful");
-                console.log(item.name);
+            getCognitoUserData(sub, function (error, item) {
+                if (error) {
+                    console.log("getCognitoUserData is in error: " + error);
+                    outputError(res, 404, "3", "Error getting user details from Cognito", error.desc);
+                }
+                else {
 
-                var mfa = item.MFAOptions;
-                var userAtts = item.UserAttributes;
-                var phone = getPhoneNumber(userAtts);
+                    if (item == null) {
+                        outputError(res, 404, "3", "Could not find user record in Cognito");
+                        console.log("Item is null");
+                    }
+                    else {
+                        console.log("getCognitoUserData was successful");
+                        console.log(item.name);
 
-                var ret = "";
+                        var mfa = item.MFAOptions;
+                        var userAtts = item.UserAttributes;
+                        var phone = getPhoneNumber(userAtts);
 
-                ret = {
-                    "mfa_enabled": !(mfa === undefined),
-                    "phone_number": phone
-                };
+                        var ret = "";
 
-                res.status(200).send(JSON.stringify(ret));
-            }
+                        ret = {
+                            "mfa_enabled": !(mfa === undefined),
+                            "phone_number": phone
+                        };
+
+                        res.status(200).send(JSON.stringify(ret));
+                    }
+
+                }
+            });
 
         }
+
     });
+
+
 });
 
 function getPhoneNumber(atts) {
@@ -355,6 +368,32 @@ app.post('/api/v1/users', function (req, res, next) {
     });   
 
 });
+
+function cognitoListUsers(callback) {
+
+    AWS.config.update({ endpoint: "cognito-idp.eu-west-1.amazonaws.com" });
+    AWS.config.region = 'eu-west-1';
+
+    var params = {
+        UserPoolId: 'eu-west-1_2DtCcoypN'
+    };
+
+    var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
+    cognitoidentityserviceprovider.listUsers(params, function (err, data) {
+        if (err) {
+            console.log(err);
+            callback(err);
+        }
+
+        for (let user in data.Users) {
+            console.log("User: " + json.stringify(user));
+        }
+
+        callback(null, true);
+
+    });
+
+}
 
 function getCognitoUserData(sub, callback) {
 
