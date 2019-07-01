@@ -422,32 +422,38 @@ app.post('/api/v1/users', function (req, res, next) {
 
 function cognitoUpdatePhone(username, phoneNumber, callback) {
 
-    console.log("Setting User's Phone Number");
+    try {
 
-    AWS.config.update({ endpoint: "cognito-idp.eu-west-1.amazonaws.com" });
-    AWS.config.region = 'eu-west-1';
+        console.log("Setting User's Phone Number");
 
-    var params = {
-        UserPoolId: 'eu-west-1_2DtCcoypN',
-        Username: username,
-        UserAttributes: {
-            phone_number: phoneNumber,
-            phone_number_verified: true
-        }
-    };
+        AWS.config.update({ endpoint: "cognito-idp.eu-west-1.amazonaws.com" });
+        AWS.config.region = 'eu-west-1';
 
-    var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();    
-    cognitoidentityserviceprovider.AdminUpdateUserAttributes(params, function (err, data) {
-        if (err) {
-            console.log(err);
-            callback(err);
-        }
-        else {
-            console.log("Phone Number Setting is Successful");
-            callback(null, true);
-        }
-    });
+        var params = {
+            UserPoolId: 'eu-west-1_2DtCcoypN',
+            Username: username,
+            UserAttributes: {
+                phone_number: phoneNumber,
+                phone_number_verified: true
+            }
+        };
 
+        var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
+        cognitoidentityserviceprovider.AdminUpdateUserAttributes(params, function (err, data) {
+            if (err) {
+                console.log(err);
+                callback(err);
+            }
+            else {
+                console.log("Phone Number Setting is Successful");
+                callback(null, true);
+            }
+        });
+    }
+    catch (e) {
+        console.log("Error: " + e);
+        throw e;
+    }
 }
 
 function cognitoSetMFAStatus(username, status, callback) {
