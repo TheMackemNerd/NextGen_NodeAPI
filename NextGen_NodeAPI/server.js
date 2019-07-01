@@ -430,6 +430,8 @@ function addUserToCognito(callback) {
 
 function outputError(res, statusCode, code, short, desc) {
 
+    console.log("An error has occured");
+
     var body = {
         code: code,
         short: short,
