@@ -94,10 +94,10 @@ app.put('/api/v1/users/me/mfa', cors(), function (req, res, next) {
     sub = req.header("X-USER");
     console.log("X-USER: " + sub);
 
-    var mfa_enabled = req.body.mfa_enabled;
-    console.log("mfa_enabled: " + mfa_enabled);
-    var phone_number = req.body.phone_number;
-    console.log("Phone number: " + phone_number);
+    var bod = JSON.parse(req.body);
+    var mfa_enabled = bod.mfa_enabled;
+
+    console.log("mfa_enabled: " + mfa_enabled);    
 
     if (sub == undefined) {
         outputError(res, 400, "1", "missing information", "The User was not passed from the directory");
