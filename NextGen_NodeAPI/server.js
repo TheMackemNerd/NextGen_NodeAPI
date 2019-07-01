@@ -386,7 +386,7 @@ function cognitoListUsers(callback) {
         }
 
         for (let user in data.Users) {
-            console.log("User: " + json.stringify(user));
+            console.log("User: " + JSON.stringify(user));
         }
 
         callback(null, true);
