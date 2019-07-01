@@ -115,7 +115,7 @@ app.put('/api/v1/users/me/mfa', cors(), function (req, res, next) {
                     outputError(res, 400, "3", "Error updating MFA Status", error.desc);
                 }
                 else {
-                    es.status(200).send();
+                    res.status(200).send();
                 }
             });
         }
