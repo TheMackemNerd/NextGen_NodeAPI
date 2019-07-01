@@ -433,7 +433,7 @@ function cognitoUpdatePhone(username, phoneNumber, callback) {
             UserPoolId: 'eu-west-1_2DtCcoypN',
             Username: username,
             UserAttributes: {
-                custom:tenant: 2
+                "custom:tenant": 2
             }
         };
 
