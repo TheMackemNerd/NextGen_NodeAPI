@@ -423,7 +423,7 @@ app.post('/api/v1/users', function (req, res, next) {
 function cognitoUpdatePhone(username, phoneNumber, callback) {
 
     try {
-
+        /*
         console.log("Setting User's Phone Number");
 
         AWS.config.update({ endpoint: "cognito-idp.eu-west-1.amazonaws.com" });
@@ -448,6 +448,8 @@ function cognitoUpdatePhone(username, phoneNumber, callback) {
                 callback(null, true);
             }
         });
+        */
+        return (null, true);
     }
     catch (e) {
         console.log("Error: " + e);
