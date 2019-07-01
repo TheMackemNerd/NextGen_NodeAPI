@@ -95,7 +95,7 @@ app.put('/api/v1/users/me/mfa', cors(), function (req, res, next) {
     console.log("X-USER: " + sub);
 
     let body = [];
-    request.on('data', (chunk) => {
+    req.on('data', (chunk) => {
         body.push(chunk);
     }).on('end', () => {
         body = Buffer.concat(body).toString();
