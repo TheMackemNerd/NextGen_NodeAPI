@@ -158,7 +158,7 @@ app.get('/api/v1/users/me/mfa', cors(), function (req, res, next) {
                         console.log("getCognitoUserData was successful");
                         console.log(item.name);
 
-                        var mfa = item.MFAOptions;
+                        var mfa = item.preferredMfaSetting;
                         var userAtts = item.UserAttributes;
                         var phone = getPhoneNumber(userAtts);
 
@@ -406,7 +406,7 @@ app.post('/api/v1/users', function (req, res, next) {
  
 function cognitoSetMFAStatus(username, status, callback) {
 
-    console.log("Searching for the User given a Sub");
+    console.log("Setting MFA status");
 
     AWS.config.update({ endpoint: "cognito-idp.eu-west-1.amazonaws.com" });
     AWS.config.region = 'eu-west-1';
@@ -427,6 +427,7 @@ function cognitoSetMFAStatus(username, status, callback) {
             callback(err);
         }
         else {
+            console.log("MFA status Setting is Successful");
             callback(null, true);
         }           
 
