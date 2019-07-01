@@ -363,7 +363,7 @@ function getCognitoUserData(sub, callback) {
 
     var params = {
         UserPoolId: 'eu-west-1_2DtCcoypN',
-        Username: sub
+        sub: sub
     };
 
     var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
