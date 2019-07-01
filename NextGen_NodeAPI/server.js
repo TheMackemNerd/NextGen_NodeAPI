@@ -94,9 +94,6 @@ app.put('/api/v1/users/me/mfa', cors(), function (req, res, next) {
     sub = req.header("X-USER");
     console.log("X-USER: " + sub);
 
-    console.log("Getting body values");
-    console.log("Inbound Request: " + req.body);
-
     var mfa_enabled = req.body.mfa_enabled;
     console.log("mfa_enabled: " + mfa_enabled);
     var phone_number = req.body.phone_number;
