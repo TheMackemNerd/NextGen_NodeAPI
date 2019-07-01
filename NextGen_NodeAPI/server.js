@@ -102,9 +102,9 @@ app.get('/api/v1/users/me/mfa', cors(), function (req, res, next) {
     }
 
     cognitoListUsers(function (err, result) {
-        if (error) {
+        if (err) {
             console.log("cognitoListUsers is in error: " + err);
-            outputError(res, 404, "3", "Error Listing users in Cognito", error.desc);
+            outputError(res, 404, "3", "Error Listing users in Cognito", err.desc);
         }
         else {
 
@@ -386,7 +386,7 @@ function cognitoListUsers(callback) {
         }
 
         for (let user in data.Users) {
-            console.log("User: " + JSON.stringify(user));
+            console.log("User: " + JSON.stringify(data.Users[user]));
         }
 
         callback(null, true);
