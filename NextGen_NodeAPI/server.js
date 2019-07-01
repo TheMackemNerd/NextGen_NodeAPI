@@ -431,12 +431,12 @@ function cognitoUpdatePhone(username, phoneNumber, callback) {
         UserPoolId: 'eu-west-1_2DtCcoypN',
         Username: username,
         UserAttributes: {
-            Phone: phoneNumber,
+            phone_number: phoneNumber,
             phone_number_verified: true
         }
     };
 
-    var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
+    var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();    )
     cognitoidentityserviceprovider.AdminUpdateUserAttributes(params, function (err, data) {
         if (err) {
             console.log(err);
@@ -446,7 +446,6 @@ function cognitoUpdatePhone(username, phoneNumber, callback) {
             console.log("Phone Number Setting is Successful");
             callback(null, true);
         }
-
     });
 
 }
