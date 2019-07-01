@@ -97,7 +97,6 @@ app.get('/api/v1/users/me/mfa', cors(), function (req, res, next) {
 
     if (sub == undefined) {
         outputError(res, 400, "1", "missing information", "The User was not passed from the directory");
-        return false;
     }
 
     getCognitoUserData(sub, function (error, item) {
@@ -105,14 +104,12 @@ app.get('/api/v1/users/me/mfa', cors(), function (req, res, next) {
             console.log("getCognitoUserData is in error");
             outputError(res, 404, "3", "Error getting user details from Cognito", error.desc);
             console.log(error);
-            return false;
         }
         else {
 
             if (item == null) {
                 outputError(res, 404, "3", "Could not find user record in Cognito");
                 console.log("Item is null");
-                return false;
             }
 
             console.log("getCognitoUserData was successful");
