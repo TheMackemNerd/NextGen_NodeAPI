@@ -108,7 +108,7 @@ app.get('/api/v1/users/me/mfa', cors(), function (req, res, next) {
         }
         else {
 
-            getCognitoUserData(sub, function (error, item) {
+            getCognitoUserData(result, function (error, item) {
                 if (error) {
                     console.log("getCognitoUserData is in error: " + error);
                     outputError(res, 404, "3", "Error getting user details from Cognito", error.desc);
@@ -383,6 +383,8 @@ function cognitoListUsers(sub, callback) {
         Filter: filter
     };
 
+    var un = "";
+
     var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
     cognitoidentityserviceprovider.listUsers(params, function (err, data) {
         if (err) {
@@ -392,9 +394,11 @@ function cognitoListUsers(sub, callback) {
 
         for (let user in data.Users) {
             console.log("User: " + JSON.stringify(data.Users[user]));
+            un = data.Users[user].Username;
+
         }
 
-        callback(null, true);
+        callback(null, un);
 
     });
 
