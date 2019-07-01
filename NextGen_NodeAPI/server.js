@@ -123,15 +123,13 @@ app.get('/api/v1/users/me/mfa', cors(), function (req, res, next) {
             var phone = getPhoneNumber(userAtts);
 
             var ret = "";
-            console.log(ret);
-            if (mfa == undefined) {
-                ret = "{'mfa_enabled':'false', 'phone_number':'" + phone + "'}";
-            }
-            else {
-                ret = "{'mfa_enabled':'true', 'phone_number':'" + phone + "'}";
-            }
 
-            res.status(200).send(ret);
+            ret = {
+                "mfa_enabled": (mfa === undefined),
+                "phone_number": phone
+            };
+
+            res.status(200).send(JSON.stringify(ret));
 
         }
     });
