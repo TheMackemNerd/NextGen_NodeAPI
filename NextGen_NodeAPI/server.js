@@ -94,7 +94,7 @@ app.put('/api/v1/users/me/mfa', cors(), function (req, res, next) {
     sub = req.header("X-USER");
     console.log("X-USER: " + sub);
 
-    var bod = JSON.parse(req.body);
+    var bod = JSON.stringify(req.body);
     var mfa_enabled = bod.mfa_enabled;
 
     console.log("mfa_enabled: " + mfa_enabled);    
