@@ -108,14 +108,14 @@ app.put('/api/v1/users/me/mfa', jsonParser, function (req, res, next) {
     cognitoListUsers(sub, function (err, result) {
         if (err) {
             console.log("cognitoListUsers is in error: " + err);
-            outputError(res, 404, "3", "Error Listing users in Cognito", err.desc);
+            outputError(res, 400, "3", "Error Listing users in Cognito", err.desc);
         }
         else {
 
-            cognitoUpdatePhone(phoneNumber, function (err, response) {
-            if (err) {
-                console.log("cognitoUpdatePhone is in error: " + err);
-                outputError(res, 400, "3", "Error updating Phone Number Status", err.desc);
+            cognitoUpdatePhone(result, phoneNumber, function (err2, response) {
+            if (err2) {
+                console.log("cognitoUpdatePhone is in error: " + err2);
+                outputError(res, 400, "3", "Error updating Phone Number Status", err2.desc);
             }
                 else {
 
@@ -420,7 +420,7 @@ app.post('/api/v1/users', function (req, res, next) {
 
 });
 
-function cognitoUpdatePhone(phoneNumber, callback) {
+function cognitoUpdatePhone(username, phoneNumber, callback) {
 
     console.log("Setting User's Phone Number");
 
