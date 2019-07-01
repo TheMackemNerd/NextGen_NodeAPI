@@ -96,7 +96,7 @@ app.put('/api/v1/users/me/mfa', jsonParser, function (req, res, next) {
     sub = req.header("X-USER");
     console.log("X-USER: " + sub);
 
-    var mfa_enabled = req.body.mfa_enabled;
+    var mfa_enabled = (req.body.mfa_enabled === 'true');
 
     console.log("mfa_enabled: " + mfa_enabled);    
 
