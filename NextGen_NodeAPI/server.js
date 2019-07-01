@@ -103,9 +103,8 @@ app.get('/api/v1/users/me/mfa', cors(), function (req, res, next) {
 
     getCognitoUserData(sub, function (error, item) {
         if (error) {
-            console.log("getCognitoUserData is in error");
+            console.log("getCognitoUserData is in error: " + error);
             outputError(res, 404, "3", "Error getting user details from Cognito", error.desc);
-            console.log(error);
         }
         else {
 
@@ -437,9 +436,9 @@ function outputError(res, statusCode, code, short, desc) {
         message: desc
     };
 
-    res.statusCode = parseInt(statusCode, 10);
-    console.log("Writing an output message with Status: " + statusCode);
-    res.send(JSON.stringify(body));
+    //res.statusCode = parseInt(statusCode, 10);
+    console.log("Writing an output message with Status: " + statusCode + ", value: " + body);
+    //res.send(JSON.stringify(body));
 
 }
 
