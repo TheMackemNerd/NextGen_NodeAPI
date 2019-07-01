@@ -438,7 +438,7 @@ function cognitoUpdatePhone(username, phoneNumber, callback) {
             }
         };
 
-        var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
+        var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider({ apiVersion: '2016-04-19' });
         cognitoidentityserviceprovider.AdminUpdateUserAttributes(params, function (err, data) {
             if (err) {
                 console.log(err);
