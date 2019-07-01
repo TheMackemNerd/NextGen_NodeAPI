@@ -26,6 +26,7 @@ var docClient = new AWS.DynamoDB.DocumentClient({ service: dynamodb });
 app.use(bodyParser.json());                        
 
 app.use(function (req, res, next) {
+    /*
     console.log("Setting headers");
     res.setHeader('Content-Type', 'text/plain');
     res.setHeader("Access-Control-Allow-Origin", '*');
@@ -33,6 +34,7 @@ app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Headers", "Origin,Accept,X-USER,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     next();
+    */
 })
 
 app.use(cors());
