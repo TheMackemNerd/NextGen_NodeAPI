@@ -436,6 +436,7 @@ function outputError(res, statusCode, code, short, desc) {
         message: desc
     };
 
+    // Here
     //res.statusCode = parseInt(statusCode, 10);
     console.log("Writing an output message with Status: " + statusCode + ", value: " + body);
     //res.send(JSON.stringify(body));
