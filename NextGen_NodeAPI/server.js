@@ -156,9 +156,9 @@ app.get('/api/v1/users/me/mfa', cors(), function (req, res, next) {
                     }
                     else {
                         console.log("getCognitoUserData was successful");
-                        console.log(item.name);
+                        console.log(item.Username);
 
-                        var mfa = item.preferredMfaSetting;
+                        var mfa = item.PreferredMfaSetting;
                         var userAtts = item.UserAttributes;
                         var phone = getPhoneNumber(userAtts);
 
@@ -168,6 +168,8 @@ app.get('/api/v1/users/me/mfa', cors(), function (req, res, next) {
                             "mfa_enabled": !(mfa === undefined),
                             "phone_number": phone
                         };
+
+                        console.log("Returning Payload: " + ret);
 
                         res.status(200).send(JSON.stringify(ret));
                     }
