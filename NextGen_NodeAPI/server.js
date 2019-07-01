@@ -113,22 +113,23 @@ app.get('/api/v1/users/me/mfa', cors(), function (req, res, next) {
                 outputError(res, 404, "3", "Could not find user record in Cognito");
                 console.log("Item is null");
             }
+            else {
+                console.log("getCognitoUserData was successful");
+                console.log(item.name);
 
-            console.log("getCognitoUserData was successful");
-            console.log(item.name);
+                var mfa = item.MFAOptions;
+                var userAtts = item.UserAttributes;
+                var phone = getPhoneNumber(userAtts);
 
-            var mfa = item.MFAOptions;
-            var userAtts = item.UserAttributes;
-            var phone = getPhoneNumber(userAtts);
+                var ret = "";
 
-            var ret = "";
+                ret = {
+                    "mfa_enabled": !(mfa === undefined),
+                    "phone_number": phone
+                };
 
-            ret = {
-                "mfa_enabled": !(mfa === undefined),
-                "phone_number": phone
-            };
-
-            res.status(200).send(JSON.stringify(ret));
+                res.status(200).send(JSON.stringify(ret));
+            }
 
         }
     });
