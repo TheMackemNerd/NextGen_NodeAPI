@@ -101,7 +101,7 @@ app.get('/api/v1/users/me/mfa', cors(), function (req, res, next) {
         outputError(res, 400, "1", "missing information", "The User was not passed from the directory");
     }
 
-    cognitoListUsers(function (err, result) {
+    cognitoListUsers(sub, function (err, result) {
         if (err) {
             console.log("cognitoListUsers is in error: " + err);
             outputError(res, 404, "3", "Error Listing users in Cognito", err.desc);
