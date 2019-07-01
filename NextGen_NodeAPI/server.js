@@ -415,7 +415,7 @@ function cognitoSetMFAStatus(username, status, callback) {
         Username: username,
         SMSMfaSettings: {
             Enabled: status,
-            PreferredMfa: true
+            PreferredMfa: status
         }
     };
 
