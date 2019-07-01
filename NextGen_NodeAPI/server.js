@@ -423,7 +423,7 @@ app.post('/api/v1/users', function (req, res, next) {
 function cognitoUpdatePhone(username, phoneNumber, callback) {
 
     try {
-        /*
+        
         console.log("Setting User's Phone Number");
 
         AWS.config.update({ endpoint: "cognito-idp.eu-west-1.amazonaws.com" });
@@ -435,9 +435,9 @@ function cognitoUpdatePhone(username, phoneNumber, callback) {
             UserAttributes: {
                 "custom:tenant": 2
             }
-        };
+        };        
 
-        var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider({ apiVersion: '2016-04-19' });
+        var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider({ apiVersion: '2016-04-18' });
         cognitoidentityserviceprovider.AdminUpdateUserAttributes(params, function (err, data) {
             if (err) {
                 console.log(err);
@@ -448,7 +448,7 @@ function cognitoUpdatePhone(username, phoneNumber, callback) {
                 callback(null, true);
             }
         });
-        */
+        
         return (null, true);
     }
     catch (e) {
