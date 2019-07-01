@@ -369,13 +369,14 @@ app.post('/api/v1/users', function (req, res, next) {
 
 });
 
-function cognitoListUsers(callback) {
+function cognitoListUsers(sub, callback) {
 
     AWS.config.update({ endpoint: "cognito-idp.eu-west-1.amazonaws.com" });
     AWS.config.region = 'eu-west-1';
 
     var params = {
-        UserPoolId: 'eu-west-1_2DtCcoypN'
+        UserPoolId: 'eu-west-1_2DtCcoypN',
+        Filter: "sub=" + sub
     };
 
     var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
