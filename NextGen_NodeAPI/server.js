@@ -23,6 +23,8 @@ AWS.config.update({ endpoint: "https://dynamodb.eu-west-1.amazonaws.com" });
 var dynamodb = new AWS.DynamoDB({ region: 'eu-west-1' });
 var docClient = new AWS.DynamoDB.DocumentClient({ service: dynamodb });
 
+var jsonParser = bodyParser.json();
+
 app.use(bodyParser.json());                        
 
 app.use(function (req, res, next) {
@@ -89,21 +91,12 @@ app.get('/api/v1/users', function(req, res, next) {
 
 });
 
-app.put('/api/v1/users/me/mfa', cors(), function (req, res, next) {
+app.put('/api/v1/users/me/mfa', jsonParser, function (req, res, next) {
 
     sub = req.header("X-USER");
     console.log("X-USER: " + sub);
 
-    let body = [];
-    req.on('data', (chunk) => {
-        body.push(chunk);
-    }).on('end', () => {
-        body = Buffer.concat(body).toString();
-    });
-    console.log(body);
-    var bod = JSON.parse(req.body);
-    console.log(bod);
-    var mfa_enabled = bod.mfa_enabled;
+    var mfa_enabled = req.body.mfa_enabled;
 
     console.log("mfa_enabled: " + mfa_enabled);    
 
