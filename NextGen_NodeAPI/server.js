@@ -125,7 +125,7 @@ app.get('/api/v1/users/me/mfa', cors(), function (req, res, next) {
             var ret = "";
 
             ret = {
-                "mfa_enabled": (mfa === undefined),
+                "mfa_enabled": !(mfa === undefined),
                 "phone_number": phone
             };
 
