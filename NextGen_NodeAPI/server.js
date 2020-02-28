@@ -1,5 +1,6 @@
 'use strict';
 var http = require('http');
+var https = require('https');
 var AWS = require("aws-sdk");
 var atob = require('atob');
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js-with-node-fetch')
@@ -101,13 +102,23 @@ function getKeys(kid) {
 }
 
 async function callForKeys(callback) {
-    var request = new XMLHttpRequest();
-    request.open('GET', "https://cognito-idp.eu-west-1.amazonaws.com/eu-west-1_2DtCcoypN/.well-known/jwks.json");
-    request.onload = function () {
-        var data = this.response;
-        callback(data);
-    }
-    request.send();
+
+    https.get('https://cognito-idp.eu-west-1.amazonaws.com/eu-west-1_2DtCcoypN/.well-known/jwks.json', (resp) => {
+        let data = '';
+
+        // A chunk of data has been recieved.
+        resp.on('data', (chunk) => {
+            data += chunk;
+        });
+        
+        resp.on('end', () => {
+            callback(data);
+        });
+
+    }).on("error", (err) => {
+        console.log("Error: " + err.message);
+    });
+
 }
 
 
