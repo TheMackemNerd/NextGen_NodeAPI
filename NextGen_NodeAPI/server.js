@@ -48,7 +48,10 @@ app.use(cors());
 app.get('/api/v1/helloworld', function (req, res, next) {
 
     var accesstoken = req.header("Authorization");
-    console.log("Access Token: " + accesstoken);
+    console.log(".");
+    console.log("##### AUTH DEMO BACKEND SERVICE - VERIFY A JWT TOKEN #####");
+    console.log(".");
+    console.log("Access Token from Authorization Header: " + accesstoken);
     console.log(".");
 
     var jwt = decodeToken(accesstoken);
@@ -73,7 +76,7 @@ app.get('/api/v1/helloworld', function (req, res, next) {
             var decoded = jwtLib.verify(accesstoken, pem)
             console.log("JWT Verified! Decoded token: " + JSON.stringify(decoded));
             console.log(".");
-            console.log("User: " + JSON.parse(decoded).sub);
+            console.log("User: " + decoded.sub);
             console.log(".");
             console.log("Returning a Status 200");
             res.status(200).send("All good! Here's some data");
@@ -95,6 +98,7 @@ function decodeToken(token) {
     try {
 
         console.log("Decoding Token");
+        console.log(".");
         const base64HeaderUrl = token.split('.')[0];
         const base64Header = base64HeaderUrl.replace('-', '+').replace('_', '/');
         const headerData = JSON.parse(atob(base64Header));
@@ -119,14 +123,16 @@ function getKey(kid, callback) {
 
         if (result != null) {        
 
-            console.log("Keys returned. Searching for matching key");
+            console.log("Web Key Set returned from AWS. Searching for matching key");
+            console.log(".");
 
             var jsonRes = JSON.parse(result);
             var i;        
             for (i = 0; i < jsonRes.keys.length; i++) {
 
                 if (jsonRes.keys[i].kid == kid) {
-                    console.log("Key match!");
+                    console.log("Key found!");
+                    console.log(".");
                     callback(jsonRes.keys[i]);
                 }
             }
