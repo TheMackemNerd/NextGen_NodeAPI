@@ -54,7 +54,10 @@ app.get('/api/v1/helloworld', function (req, res, next) {
 
     console.log("Getting JWKS...");
 
-    var key = getKeys(kid);
+    var key;
+    getKey(kid, function (item) {
+        key = item;
+    });
 
     console.log("Key Found: " + key);
 
@@ -82,9 +85,7 @@ function decodeToken(token) {
 
 }
 
-function getKeys(kid) {
-
-    var key;
+function getKey(kid, callback) {
 
     callForKeys(function (result) {
 
@@ -97,14 +98,13 @@ function getKeys(kid) {
                 console.log("Key: " + i + ": " + jsonRes.keys[i].kid);
 
                 if (jsonRes.keys[i].kid == kid) {
-                    key = jsonRes.keys[i];
+                    console.log("Key Match!");
+                    callback(jsonRes.keys[i]);
                 }
             }
         }
 
     });
-
-    return key;
 
 }
 
