@@ -58,7 +58,7 @@ app.get('/api/v1/helloworld', function (req, res, next) {
     var kid = jwt.header.kid;
     console.log("Kid: " + kid);
     console.log(".");
-    console.log("Getting JWKS...");
+    console.log("Getting JWKS from https://cognito-idp.eu-west-1.amazonaws.com/eu-west-1_2DtCcoypN/.well-known/jwks.json");
     console.log(".");
 
     var key;
