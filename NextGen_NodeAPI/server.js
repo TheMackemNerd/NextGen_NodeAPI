@@ -1,6 +1,7 @@
 'use strict';
 var http = require('http');
-var AWS = require("aws-sdk")
+var AWS = require("aws-sdk");
+var atob = require('atob');
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js-with-node-fetch')
 const CognitoUserPool = AmazonCognitoIdentity.CognitoUserPool
 const express = require('express')
@@ -64,11 +65,11 @@ function decodeToken(token) {
         console.log("Decoding Token");
         const base64HeaderUrl = token.split('.')[0];
         const base64Header = base64HeaderUrl.replace('-', '+').replace('_', '/');
-        const headerData = JSON.parse(window.atob(base64Header));
+        const headerData = JSON.parse(atob(base64Header));
 
         const base64Url = token.split('.')[1];
         const base64 = base64Url.replace('-', '+').replace('_', '/');
-        var tokenData = JSON.parse(window.atob(base64));
+        var tokenData = JSON.parse(atob(base64));
         tokenData.header = headerData;
 
         return tokenData;
