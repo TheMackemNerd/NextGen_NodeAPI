@@ -93,6 +93,9 @@ function getKeys(kid) {
             var jsonRes = JSON.parse(result);
             var i;        
             for (i = 0; i < jsonRes.keys.length; i++) {
+
+                console.log("Key: " + i + ": " + jsonRes.keys[i]);
+
                 if (jsonRes.keys[i].kid == kid) {
                     key = jsonRes.keys[i];
                 }
@@ -116,7 +119,6 @@ async function callForKeys(callback) {
         });
         
         resp.on('end', () => {
-            console.log("Data: " + data);
             callback(data);
         });
 
