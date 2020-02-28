@@ -94,7 +94,7 @@ function getKeys(kid) {
             var i;        
             for (i = 0; i < jsonRes.keys.length; i++) {
 
-                console.log("Key: " + i + ": " + jsonRes.keys[i]);
+                console.log("Key: " + i + ": " + jsonRes.keys[i].kid);
 
                 if (jsonRes.keys[i].kid == kid) {
                     key = jsonRes.keys[i];
