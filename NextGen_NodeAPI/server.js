@@ -88,15 +88,13 @@ function getKeys(kid) {
 
     callForKeys(function (result) {
 
-        console.log("Result: " + result);
-
         if (result != null) {        
-        console.log("Got Keys, looking for Key with matching Kid");
 
-        var i;        
-        for (i = 0; i < result.keys.length; i++) {
-            if (result.keys[i].kid == kid) {
-                key = result.keys[i];
+            var jsonRes = JSON.parse(result);
+            var i;        
+            for (i = 0; i < jsonRes.keys.length; i++) {
+                if (jsonRes.keys[i].kid == kid) {
+                    key = jsonRes.keys[i];
                 }
             }
         }
