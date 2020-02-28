@@ -41,6 +41,75 @@ app.use(function (req, res, next) {
 
 app.use(cors());
 
+app.get('/api/v1/helloworld', function (req, res, next) {
+
+    var accesstoken = req.header("Authorization");
+    console.log("Access Token: " + accesstoken);
+
+    var jwt = decodeToken(accesstoken);
+    var kid = jwt.header.kid;
+    console.log("Kid: " + kid);
+
+    console.log("Getting JWKS...");
+
+    var key = getKeys(kid);
+
+    console.log("Key Found: " + key);
+
+});
+
+function decodeToken(token) {
+    try {
+
+        console.log("Decoding Token");
+        const base64HeaderUrl = token.split('.')[0];
+        const base64Header = base64HeaderUrl.replace('-', '+').replace('_', '/');
+        const headerData = JSON.parse(window.atob(base64Header));
+
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace('-', '+').replace('_', '/');
+        var tokenData = JSON.parse(window.atob(base64));
+        tokenData.header = headerData;
+
+        return tokenData;
+
+    } catch (e) {
+        console.log("Token Parsing failed: " + e);
+        throw e;
+    }
+
+}
+
+function getKeys(kid) {
+
+    var key;
+
+    callForKeys(function (result) {
+
+        var i;        
+        for (i = 0; i < result.keys.length; i++) {
+            if (result.keys[i].kid == kid) {
+                key = result.keys[i];
+            }
+        }
+
+    });
+
+    return key;
+
+}
+
+async function callForKeys(callback) {
+    var request = new XMLHttpRequest();
+    request.open('GET', "https://cognito-idp.eu-west-1.amazonaws.com/eu-west-1_2DtCcoypN/.well-known/jwks.json");
+    request.onload = function () {
+        var data = this.response;
+        callback(data);
+    }
+    request.send();
+}
+
+
 app.get('/api/v1/users', function(req, res, next) {
 
     sub = req.query.sub;
