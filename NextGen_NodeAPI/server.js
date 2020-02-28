@@ -56,6 +56,7 @@ app.get('/api/v1/helloworld', function (req, res, next) {
 
     var key;
     getKey(kid, function (item) {
+        console.log("Item: " + item);
         key = item;
     });
 
