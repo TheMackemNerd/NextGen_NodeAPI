@@ -49,30 +49,41 @@ app.get('/api/v1/helloworld', function (req, res, next) {
 
     var accesstoken = req.header("Authorization");
     console.log("Access Token: " + accesstoken);
+    console.log(".");
 
     var jwt = decodeToken(accesstoken);
     var kid = jwt.header.kid;
     console.log("Kid: " + kid);
-
+    console.log(".");
     console.log("Getting JWKS...");
+    console.log(".");
 
     var key;
     getKey(kid, function (item) {        
         key = item;
         console.log("Key Found: " + JSON.stringify(key));
-
+        console.log(".");
         console.log("Generating PEM file from Key");
-
+        console.log(".");
         var pem = jwkToPem(key);
 
         console.log("Verifying the JWT");
-
+        console.log(".");
         try {
             var decoded = jwtLib.verify(accesstoken, pem)
-            console.log("Decoded: " + decoded);
+            console.log("JWT Verified! Decoded token: " + JSON.stringify(decoded));
+            console.log(".");
+            console.log("User: " + JSON.parse(decoded).sub);
+            console.log(".");
+            console.log("Returning a Status 200");
+            res.status(200).send("All good! Here's some data");
+
         }
         catch (err) {
             console.log("Verification Error: " + err);
+            console.log(".");
+            console.log("Returning a Status 401");
+            res.status(401).send("Invalid Token");
         }                         
 
     });
