@@ -3,6 +3,8 @@ var http = require('http');
 var https = require('https');
 var AWS = require("aws-sdk");
 var atob = require('atob');
+var jwkToPem = require('jwk-to-pem');
+var jwtLib = require('jsonwebtoken');
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js-with-node-fetch')
 const CognitoUserPool = AmazonCognitoIdentity.CognitoUserPool
 const express = require('express')
@@ -55,12 +57,26 @@ app.get('/api/v1/helloworld', function (req, res, next) {
     console.log("Getting JWKS...");
 
     var key;
-    getKey(kid, function (item) {
-        console.log("Item: " + item);
+    getKey(kid, function (item) {        
         key = item;
-    });
+        console.log("Key Found: " + JSON.stringify(key));
 
-    console.log("Key Found: " + key);
+        console.log("Generating PEM file from Key");
+
+        var pem = jwkToPem(key);
+
+        console.log("Verifying the JWT");
+
+        try {
+            var decoded = jwtLib.verify(accesstoken, pem)
+            console.log("Decoded: " + decoded);
+        }
+        catch (err) {
+            console.log("Verification Error: " + err);
+        }                         
+
+    });
+    
 
 });
 
@@ -92,14 +108,14 @@ function getKey(kid, callback) {
 
         if (result != null) {        
 
+            console.log("Keys returned. Searching for matching key");
+
             var jsonRes = JSON.parse(result);
             var i;        
             for (i = 0; i < jsonRes.keys.length; i++) {
 
-                console.log("Key: " + i + ": " + jsonRes.keys[i].kid);
-
                 if (jsonRes.keys[i].kid == kid) {
-                    console.log("Key Match!");
+                    console.log("Key match!");
                     callback(jsonRes.keys[i]);
                 }
             }
