@@ -223,10 +223,10 @@ app.put('/api/v1/users/me/mfa', jsonParser, function (req, res, next) {
     sub = req.header("X-USER");
     console.log("X-USER: " + sub);
 
-    var mfa_enabled = (req.body.mfa_enabled === 'true');
     var phoneNumber = req.body.phone_number;
 
-    console.log("mfa_enabled: " + mfa_enabled);    
+    console.log("Phone number: " + phoneNumber);
+
 
     if (sub == undefined) {
         outputError(res, 400, "1", "missing information", "The User was not passed from the directory");
@@ -552,9 +552,9 @@ function cognitoUpdatePhone(username, email, phoneNumber, callback) {
     try {
         
         console.log("Setting User's Phone Number");
-        console.log("Username" + username);
-        console.log("Email" + email);
-        console.log("Phone number" + phoneNumber);
+        console.log("Username: " + username);
+        console.log("Email: " + email);
+        console.log("Phone number: " + phoneNumber);
 
         AWS.config.update({ endpoint: "cognito-idp.eu-west-1.amazonaws.com" });
         AWS.config.region = 'eu-west-1';
@@ -564,11 +564,9 @@ function cognitoUpdatePhone(username, email, phoneNumber, callback) {
             Username: username,
             UserAttributes: [
                 {
-                    "Name": "phone_number"
-                },
-                {
+                    "Name": "phone_number",
                     "Value": phoneNumber
-            }]
+                }]
         };        
 
         var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
