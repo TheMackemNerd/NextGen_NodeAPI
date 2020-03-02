@@ -225,7 +225,7 @@ app.put('/api/v1/users/me/mfa', function (req, res) {
 
     var phoneNumber = req.query.phone_number;
     var mfa_enabled = req.query.mfa_enabled;
-    var mfa_type = req.query.mfa_type;
+    var mfa_type = 1;
 
     console.log("Phone number: " + phoneNumber);
 
