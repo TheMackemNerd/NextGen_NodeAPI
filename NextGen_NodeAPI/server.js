@@ -218,15 +218,12 @@ app.get('/api/v1/users', function(req, res, next) {
 
 });
 
-app.put('/api/v1/users/me/mfa', jsonParser, function (req, res, next) {
+app.put('/api/v1/users/me/mfa', function (req, res) {
 
     sub = req.header("X-USER");
     console.log("X-USER: " + sub);
 
-    console.log("Body: " + jsonParser(req));    
-    console.log("Body: " + jsonParser(req).body);  
-
-    var phoneNumber = jsonParser(req).body.phone_number;
+    var phoneNumber = req.query.phone_number;
 
     console.log("Phone number: " + phoneNumber);
 
