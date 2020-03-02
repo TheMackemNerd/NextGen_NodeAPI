@@ -610,10 +610,6 @@ function cognitoSetMFAStatus(username, status, mfatype, callback) {
         SMSMfaSettings: {
             Enabled: isOn,
             PreferredMfa: isSMS
-        },
-        SoftwareTokenMfaSettings: {
-            Enabled: isOn,
-            PreferredMfa: isToken
         }
     };
 
