@@ -565,7 +565,7 @@ function cognitoUpdatePhone(username, email, phoneNumber, callback) {
             UserAttributes: [
                 {
                     "Name": "phone_number",
-                    "Value": phoneNumber
+                    "Value": "+" + phoneNumber
                 }]
         };        
 
