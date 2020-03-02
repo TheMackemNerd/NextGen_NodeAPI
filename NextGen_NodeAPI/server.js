@@ -238,8 +238,8 @@ app.put('/api/v1/users/me/mfa', jsonParser, function (req, res, next) {
             outputError(res, 400, "3", "Error Listing users in Cognito", err.desc);
         }
         else {
-            var res2 = split(result, ";");
-            cognitoUpdatePhone(result[0], result[1], phoneNumber, function (err2, response) {
+            var res2 = result.split(";");
+            cognitoUpdatePhone(res2[0], res2[1], phoneNumber, function (err2, response) {
             if (err2) {
                 console.log("cognitoUpdatePhone is in error: " + err2);
                 outputError(res, 400, "3", "Error updating Phone Number Status", err2.desc);
