@@ -247,7 +247,7 @@ app.put('/api/v1/users/me/mfa', function (req, res) {
             }
                 else {
 
-                cognitoSetMFAStatus(result, mfa_enabled, function (error, response) {
+                cognitoSetMFAStatus(res2[0], mfa_enabled, function (error, response) {
                     if (error) {
                         console.log("cognitoSetMFAStatus is in error: " + error);
                         outputError(res, 400, "3", "Error updating MFA Status", error.desc);
@@ -596,6 +596,7 @@ function cognitoSetMFAStatus(username, status, callback) {
     console.log("Setting MFA status");
 
     var sta = (status == "true");
+    console.log("User: " + username);
 
     AWS.config.update({ endpoint: "cognito-idp.eu-west-1.amazonaws.com" });
     AWS.config.region = 'eu-west-1';
