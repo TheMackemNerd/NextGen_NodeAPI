@@ -555,11 +555,11 @@ function cognitoUpdatePhone(username, phoneNumber, callback) {
             UserPoolId: 'eu-west-1_2DtCcoypN',
             Username: username,
             UserAttributes: {
-                "custom:tenant": 2
+                "phone_number": phoneNumber
             }
         };        
 
-        var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider({ apiVersion: '2016-04-18' });
+        var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider({ apiVersion: '2016-04-18' });        
         cognitoidentityserviceprovider.AdminUpdateUserAttributes(params, function (err, data) {
             if (err) {
                 console.log(err);
