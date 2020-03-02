@@ -24,6 +24,11 @@ var phone = "";
 
 AWS.config.update({ endpoint: "https://dynamodb.eu-west-1.amazonaws.com" });
 
+AWS.config.apiVersions = {
+    cognitoidentityserviceprovider: '2016-04-18',
+    // other service API versions
+};
+
 var dynamodb = new AWS.DynamoDB({ region: 'eu-west-1' });
 var docClient = new AWS.DynamoDB.DocumentClient({ service: dynamodb });
 
@@ -559,7 +564,7 @@ function cognitoUpdatePhone(username, phoneNumber, callback) {
             }
         };        
 
-        var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider({ apiVersion: '2016-04-18' });        
+        var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();        
         cognitoidentityserviceprovider.AdminUpdateUserAttributes(params, function (err, data) {
             if (err) {
                 console.log(err);
