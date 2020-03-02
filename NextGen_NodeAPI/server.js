@@ -238,8 +238,8 @@ app.put('/api/v1/users/me/mfa', jsonParser, function (req, res, next) {
             outputError(res, 400, "3", "Error Listing users in Cognito", err.desc);
         }
         else {
-
-            cognitoUpdatePhone(result, phoneNumber, function (err2, response) {
+            var res2 = split(result, ";");
+            cognitoUpdatePhone(result[0], result[1], phoneNumber, function (err2, response) {
             if (err2) {
                 console.log("cognitoUpdatePhone is in error: " + err2);
                 outputError(res, 400, "3", "Error updating Phone Number Status", err2.desc);
@@ -547,11 +547,14 @@ app.post('/api/v1/users', function (req, res, next) {
 
 });
 
-function cognitoUpdatePhone(username, phoneNumber, callback) {
+function cognitoUpdatePhone(username, email, phoneNumber, callback) {
 
     try {
         
         console.log("Setting User's Phone Number");
+        console.log("Username" + username);
+        console.log("Email" + email);
+        console.log("Phone number" + phoneNumber);
 
         AWS.config.update({ endpoint: "cognito-idp.eu-west-1.amazonaws.com" });
         AWS.config.region = 'eu-west-1';
@@ -559,8 +562,12 @@ function cognitoUpdatePhone(username, phoneNumber, callback) {
         var params = {
             UserPoolId: 'eu-west-1_2DtCcoypN',
             Username: username,
-            UserAttributes: [{
-                "phone_number": phoneNumber
+            UserAttributes: [
+                {
+                    "email": email
+                },
+                {
+                    "phone_number": phoneNumber
             }]
         };        
 
@@ -631,6 +638,7 @@ function cognitoListUsers(sub, callback) {
     };
 
     var un = "";
+    var em = "";
 
     var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
     console.log("API Version: " + cognitoidentityserviceprovider.apiVersion);
@@ -643,7 +651,7 @@ function cognitoListUsers(sub, callback) {
 
         for (let user in data.Users) {
             console.log("User: " + JSON.stringify(data.Users[user]));
-            un = data.Users[user].Username;
+            un = data.Users[user].Username + ";" + data.Users[user].email;
 
         }
 
