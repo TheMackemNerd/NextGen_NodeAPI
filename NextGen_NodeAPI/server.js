@@ -231,6 +231,7 @@ app.put('/api/v1/users/me/mfa', function (req, res) {
     var mfa_type = 1;
 
     console.log("Phone number: " + phoneNumber);
+    console.log("mfa_enabled: " + mfa_enabled);
 
 
     if (sub == undefined) {
@@ -598,6 +599,8 @@ function cognitoUpdatePhone(username, email, phoneNumber, callback) {
 function cognitoSetMFAStatus(username, status, mfatype, callback) {
 
     console.log("Setting MFA status");
+
+    console.log("Status: " + status);
 
     var isOn = (status == "true");
     
