@@ -223,7 +223,8 @@ app.put('/api/v1/users/me/mfa', jsonParser, function (req, res, next) {
     sub = req.header("X-USER");
     console.log("X-USER: " + sub);
 
-    console.log("Body: " + jsonParser.body);
+    console.log("Body: " + jsonParser);
+    console.log("Body: " + jsonParser.toString());
 
     var phoneNumber = jsonParser.phone_number;
 
