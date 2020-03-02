@@ -559,9 +559,9 @@ function cognitoUpdatePhone(username, phoneNumber, callback) {
         var params = {
             UserPoolId: 'eu-west-1_2DtCcoypN',
             Username: username,
-            UserAttributes: {
+            UserAttributes: [{
                 "phone_number": phoneNumber
-            }
+            }]
         };        
 
         var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
