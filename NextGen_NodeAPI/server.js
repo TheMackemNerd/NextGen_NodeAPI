@@ -225,7 +225,7 @@ app.put('/api/v1/users/me/mfa', function (req, res) {
 
     var jwt = decodeToken(accesstoken);
     sub = jwt.sub;
-
+    
     var phoneNumber = req.query.phone_number;
     var mfa_enabled = req.query.mfa_enabled;
     var mfa_type = 1;
@@ -600,9 +600,9 @@ function cognitoSetMFAStatus(username, status, mfatype, callback) {
     console.log("Setting MFA status");
 
     var isOn = (status == "true");
-    var isSMS = (mfatype == "1");
-    var isToken = (mfatype == "2");
+    
     console.log("User: " + username);
+    console.log("Status: " + isOn);
 
     AWS.config.update({ endpoint: "cognito-idp.eu-west-1.amazonaws.com" });
     AWS.config.region = 'eu-west-1';
@@ -612,7 +612,7 @@ function cognitoSetMFAStatus(username, status, mfatype, callback) {
         Username: username,
         SMSMfaSettings: {
             Enabled: isOn,
-            PreferredMfa: isSMS
+            PreferredMfa: isOn
         }
     };
 
