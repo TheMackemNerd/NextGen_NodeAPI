@@ -225,6 +225,7 @@ app.put('/api/v1/users/me/mfa', function (req, res) {
 
     var phoneNumber = req.query.phone_number;
     var mfa_enabled = req.query.mfa_enabled;
+    var mfa_type = req.query.mfa_type;
 
     console.log("Phone number: " + phoneNumber);
 
@@ -247,7 +248,7 @@ app.put('/api/v1/users/me/mfa', function (req, res) {
             }
                 else {
 
-                cognitoSetMFAStatus(res2[0], mfa_enabled, function (error, response) {
+                cognitoSetMFAStatus(res2[0], mfa_enabled, mfa_type, function (error, response) {
                     if (error) {
                         console.log("cognitoSetMFAStatus is in error: " + error);
                         outputError(res, 400, "3", "Error updating MFA Status", error.desc);
@@ -591,11 +592,13 @@ function cognitoUpdatePhone(username, email, phoneNumber, callback) {
     }
 }
 
-function cognitoSetMFAStatus(username, status, callback) {
+function cognitoSetMFAStatus(username, status, mfatype, callback) {
 
     console.log("Setting MFA status");
 
-    var sta = (status == "true");
+    var isOn = (status == "true");
+    var isSMS = (mfatype == "1");
+    var isToken = (mfatype == "2");
     console.log("User: " + username);
 
     AWS.config.update({ endpoint: "cognito-idp.eu-west-1.amazonaws.com" });
@@ -605,8 +608,12 @@ function cognitoSetMFAStatus(username, status, callback) {
         UserPoolId: 'eu-west-1_2DtCcoypN',
         Username: username,
         SMSMfaSettings: {
-            Enabled: sta,
-            PreferredMfa: sta
+            Enabled: isOn,
+            PreferredMfa: isSMS
+        },
+        SoftwareTokenMfaSettings: {
+            Enabled: isOn,
+            PreferredMfa: isToken
         }
     };
 
