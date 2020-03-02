@@ -620,7 +620,6 @@ function cognitoSetMFAStatus(username, status, callback) {
 function cognitoListUsers(sub, callback) {
 
     console.log("Searching for the User given a Sub");
-
     AWS.config.update({ endpoint: "cognito-idp.eu-west-1.amazonaws.com" });
     AWS.config.region = 'eu-west-1';
 
@@ -634,6 +633,8 @@ function cognitoListUsers(sub, callback) {
     var un = "";
 
     var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
+    console.log("API Version: " + cognitoidentityserviceprovider.apiVersion);
+    console.log("AWS API Version: " + AWS.apiVersion);
     cognitoidentityserviceprovider.listUsers(params, function (err, data) {
         if (err) {
             console.log(err);
