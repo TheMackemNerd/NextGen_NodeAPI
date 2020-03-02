@@ -220,8 +220,11 @@ app.get('/api/v1/users', function(req, res, next) {
 
 app.put('/api/v1/users/me/mfa', function (req, res) {
 
-    sub = req.header("X-USER");
-    console.log("X-USER: " + sub);
+    var accesstoken = req.header("Authorization");
+    console.log("Access Token from Authorization Header: " + accesstoken);
+
+    var jwt = decodeToken(accesstoken);
+    sub = jwt.sub;
 
     var phoneNumber = req.query.phone_number;
     var mfa_enabled = req.query.mfa_enabled;
